@@ -3,8 +3,7 @@
  * reference from https://www.camelsoftware.com/2015/12/25/reading-pwm-signals-from-an-rc-receiver-with-arduino/
  *
  * Please wire up your PWM Inputs on Digital Pins and revise the *_SOURCE fields to the corresponding pin numbers.
- * For example, on Arduino Nano BLE 33
- * https://content.arduino.cc/assets/Pinout-NANOble_latest.png, the pins are D2, D3, D4, D5.
+ * only arduino ble nano 33 and arduino due are tested
  *
  **/
 #include <Arduino.h>
@@ -45,6 +44,8 @@ int output_brake_min = 1500;
 
 Servo servoSteering;
 Servo servoBrake;
+
+bool led_builtin_was_on = false;
 void calcThrottleSignal()
 {
   // record the interrupt time so that we can tell if the receiver has a signal from the transmitter
@@ -139,7 +140,7 @@ void calcButtonSignal()
 
 void printRawStatus()
 {
-  Serial.print("THROTTLE: ");
+  Serial.print("RAW --> THROTTLE: ");
   Serial.print(throttle_pulse_time);
 
   Serial.print(" | STEERING: ");
@@ -154,7 +155,7 @@ void printRawStatus()
 
 void printOuputValues()
 {
-  Serial.print("THROTTLE: ");
+  Serial.print("OUTPUT --> THROTTLE: ");
   Serial.print(output_throttle_pwm);
 
   Serial.print(" | STEERING: ");
@@ -189,6 +190,19 @@ void constrain_outputs()
   output_steering_pwm = constrain(output_steering_pwm, output_steering_min, output_steering_max);
   output_throttle_pwm = constrain(output_throttle_pwm, output_throttle_min, output_throttle_max);
 }
+void blink_builtin_led()
+{
+  if (led_builtin_was_on == true)
+  {
+    digitalWrite(LED_BUILTIN, HIGH); // turn the LED on (HIGH is the voltage level)
+    led_builtin_was_on = false;
+  }
+  else
+  {
+    digitalWrite(LED_BUILTIN, LOW); // turn the LED off by making the voltage LOW
+    led_builtin_was_on = true;
+  }
+}
 
 void changeToNeutral()
 {
@@ -197,6 +211,10 @@ void changeToNeutral()
 }
 void setup()
 {
+  Serial.begin(9600);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
   servoSteering.attach(STEERING_OUTPUT_PIN);
   servoBrake.attach(BRAKE_OUTPUT_PIN);
   throttle_timer_start = 0;
@@ -207,21 +225,22 @@ void setup()
   attachInterrupt(STEERING_SOURCE, calcSteeringSignal, CHANGE);
   attachInterrupt(BRAKE_SOURCE, calcBrakeSignal, CHANGE);
   attachInterrupt(BUTTON_SOURCE, calcButtonSignal, CHANGE);
-
-  Serial.begin(9600);
 }
 
 void loop()
 {
+
   // printRawStatus();
+  // if button is pressed, use serial inputs
   if (button_pulse_time > 1500)
   {
-    Serial.println("Using Serial inputs, will output neutral if failed to parse from serial");
+    digitalWrite(LED_BUILTIN, HIGH);
     changeToNeutral();
-    // if button is pressed, use serial inputs
+    // TODO: parse serial inputs
   }
   else
   {
+    digitalWrite(LED_BUILTIN, LOW);
     // if button is not pressed, serial input is ignored, use controller input
     output_throttle_pwm = throttle_pulse_time;
     output_steering_pwm = steering_pulse_time;
@@ -229,7 +248,7 @@ void loop()
   }
 
   constrain_outputs();
-
-  printOuputValues();
   writeToServo();
+  printOuputValues();
+  // Serial.println();
 }
