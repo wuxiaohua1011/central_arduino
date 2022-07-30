@@ -211,7 +211,7 @@ void changeToNeutral()
 }
 void setup()
 {
-  Serial.begin(9600);
+  // Serial.begin(9600);
 
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -249,6 +249,6 @@ void loop()
 
   constrain_outputs();
   writeToServo();
-  printOuputValues();
+  // printOuputValues();
   // Serial.println();
 }
