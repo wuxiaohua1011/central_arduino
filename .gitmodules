@@ -1,0 +1,6 @@
+[submodule "lib/Servo"]
+	path = lib/Servo
+	url = https://github.com/arduino-libraries/Servo.git
+[submodule "lib/arduino-timer"]
+	path = lib/arduino-timer
+	url = https://github.com/contrem/arduino-timer
