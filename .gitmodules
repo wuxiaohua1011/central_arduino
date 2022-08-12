@@ -4,3 +4,6 @@
 [submodule "lib/arduino-timer"]
 	path = lib/arduino-timer
 	url = https://github.com/contrem/arduino-timer
+[submodule "lib/CircularBuffer"]
+	path = lib/CircularBuffer
+	url = https://github.com/rlogiacco/CircularBuffer

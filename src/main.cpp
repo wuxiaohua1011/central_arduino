@@ -8,7 +8,6 @@
  **/
 #include <main.h>
 
-
 void setup()
 {
   Serial.begin(9600);
@@ -20,30 +19,41 @@ void setup()
 
 void loop()
 {
-  // printRawStatus();
-  // if button is pressed, use serial inputs
+  loopSpeedEstimation();
+  double speed = getSpeed();
+  Serial.println(String("speed: ") + String(speed));
+
   if (button_pulse_time > 1500)
   {
+    onAutoDrive();
+  }
+  else
+  {
+    onManualDrive();
+  }
+
+  actuateBrake();
+  actuateSteering();
+  actuateThrottle();
+
+
+}
+
+
+void onAutoDrive() {
     digitalWrite(LED_BUILTIN, HIGH);
     changeSteeringToNeutral();
     changeThrottleToNeutral();
     changeBrakeToNeutral();
     // TODO: parse serial inputs
-  }
-  else
-  {
-    digitalWrite(LED_BUILTIN, LOW);
+}
+
+void onManualDrive() {
+  digitalWrite(LED_BUILTIN, LOW);
     // if button is not pressed, serial input is ignored, use controller input
     output_throttle_pwm = throttle_pulse_time;
     output_steering_pwm = steering_pulse_time;
     output_brake_pwm = brake_pulse_time;
-  }
-
-  actuateBrake();
-  actuateSteering();
-  output_throttle_pwm = 2000;
-  actuateThrottle();
-  
 }
 
 void actuateSteering() {
