@@ -1,33 +1,11 @@
-#include <Arduino.h>
-#include <Servo.h>
-#include "radiolink.h"
-#include "pin.h"
-#include <spark_max.h>
-#include <led.h>
-
-void printRawStatus()
+struct Actuation
 {
-  Serial.print("RAW --> THROTTLE: ");
-  Serial.print(throttle_pulse_time);
-
-  Serial.print(" | STEERING: ");
-  Serial.print(steering_pulse_time);
-
-  Serial.print(" | BRAKE: ");
-  Serial.print(brake_pulse_time);
-
-  Serial.print(" | BUTTON: ");
-  Serial.println(button_pulse_time);
-}
-
-void printOuputValues()
+  int throttle = 1500;
+  int steering = 1500;
+  int brake = 1500;
+};
+struct VehicleState
 {
-  Serial.print("OUTPUT --> THROTTLE: ");
-  Serial.print(output_throttle_pwm);
-
-  Serial.print(" | STEERING: ");
-  Serial.print(output_steering_pwm);
-
-  Serial.print(" | BRAKE: ");
-  Serial.println(output_brake_pwm);
-}
+  float speed = -1.0;
+  Actuation *act = new Actuation();
+};

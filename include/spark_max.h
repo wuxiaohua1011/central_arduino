@@ -4,7 +4,6 @@
 Servo servoSteering;
 Servo servoBrake;
 
-
 int output_steering_pwm = 1500;
 int output_brake_pwm = 1500;
 int output_steering_max = 1700;
@@ -25,13 +24,13 @@ void checkServoAttachments()
   }
 }
 
-void writeToSteering() {
-  servoSteering.writeMicroseconds(constrain(output_steering_pwm, output_steering_min, output_steering_max));
-
+void writeToSteering(int steering)
+{
+  servoSteering.writeMicroseconds(constrain(steering, output_steering_min, output_steering_max));
 }
-void writeToBrake() {
-  servoBrake.writeMicroseconds(constrain(output_brake_pwm, output_brake_min, output_brake_max));
-
+void writeToBrake(int brake)
+{
+  servoBrake.writeMicroseconds(constrain(brake, output_brake_min, output_brake_max));
 }
 
 void changeSteeringToNeutral()
@@ -44,7 +43,8 @@ void changeBrakeToNeutral()
   output_brake_pwm = 1000;
 }
 
-void setupSparkMax() {
-    servoSteering.attach(STEERING_OUTPUT_PIN);
-    servoBrake.attach(BRAKE_OUTPUT_PIN);
+void setupSparkMax()
+{
+  servoSteering.attach(STEERING_OUTPUT_PIN);
+  servoBrake.attach(BRAKE_OUTPUT_PIN);
 }

@@ -14,56 +14,54 @@ void setup()
   setupPwmVoltageConverter();
   setupLED();
   setupSparkMax();
-  setupRadioLink();  
+  setupRadioLink();
 }
 
 void loop()
 {
+  // update state
   loopSpeedEstimation();
-  double speed = getSpeed();
-  Serial.println(String("speed: ") + String(speed));
+  vehicleState->speed = getSpeed();
 
-  if (button_pulse_time > 1500)
-  {
-    onAutoDrive();
-  }
-  else
-  {
-    onManualDrive();
-  }
+  // process communication
+  processSerialCommunication(vehicleState);
 
-  actuateBrake();
-  actuateSteering();
-  actuateThrottle();
+  // actuation
+  onAutoDrive();
+  // if (button_pulse_time > 1500)
+  // {
+  //   onAutoDrive();
+  // }
+  // else
+  // {
+  //   onManualDrive();
+  // }
 
-
+  actuate(vehicleState->act);
 }
 
-
-void onAutoDrive() {
-    digitalWrite(LED_BUILTIN, HIGH);
-    changeSteeringToNeutral();
-    changeThrottleToNeutral();
-    changeBrakeToNeutral();
-    // TODO: parse serial inputs
+void onAutoDrive()
+{
+  // turn steering, throttle, and brake to neutral in case auto mode failed.
+  digitalWrite(LED_BUILTIN, HIGH);
+  changeSteeringToNeutral();
+  changeThrottleToNeutral();
+  changeBrakeToNeutral();
+  // TODO: parse serial inputs
 }
 
-void onManualDrive() {
+void onManualDrive()
+{
   digitalWrite(LED_BUILTIN, LOW);
-    // if button is not pressed, serial input is ignored, use controller input
-    output_throttle_pwm = throttle_pulse_time;
-    output_steering_pwm = steering_pulse_time;
-    output_brake_pwm = brake_pulse_time;
+  // if button is not pressed, serial input is ignored, use controller input
+  output_throttle_pwm = throttle_pulse_time;
+  output_steering_pwm = steering_pulse_time;
+  output_brake_pwm = brake_pulse_time;
 }
 
-void actuateSteering() {
-  writeToSteering();
-}
-
-void actuateBrake() {
-  writeToBrake();
-}
-
-void actuateThrottle() {
-  writeToThrottle();
+void actuate(Actuation *act)
+{
+  writeToSteering(act->steering);
+  writeToBrake(act->brake);
+  writeToThrottle(act->throttle);
 }

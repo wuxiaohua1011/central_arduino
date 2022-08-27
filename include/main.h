@@ -5,52 +5,38 @@
 #include <spark_max.h>
 #include <pwm_voltage_converter.h>
 #include <speed_estimation.h>
+#include <SerialCommunications.h>
 
+bool readInProgress = false;
+bool newDataFromPC = false;
+
+VehicleState *vehicleState = new VehicleState();
 /**
  * @brief  main setup function
- * @note   
+ * @note
  * @retval None
  */
 void setup();
 
 /**
  * @brief  main loop
- * @note   
+ * @note
  * @retval None
  */
 void loop();
 
-/**
- * @brief  send steering actuation
- * @note   
- * @retval None
- */
-void actuateSteering();
-
-/**
- * @brief  send brake actuation
- * @note   
- * @retval None
- */
-void actuateBrake();
-
-/**
- * @brief  send throttle actuation
- * @note   
- * @retval None
- */
-void actuateThrottle();
+void actuate(Actuation *act);
 
 /**
  * @brief  wrapper function for a series of actions on manual mode
- * @note   
+ * @note
  * @retval None
  */
 void onManualDrive();
 
 /**
  * @brief  wrapper function for a series of actions on auto mode
- * @note   
+ * @note
  * @retval None
  */
 void onAutoDrive();
