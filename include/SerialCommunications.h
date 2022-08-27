@@ -35,7 +35,7 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
         if (token != NULL)
         {
             unsigned int curr_steering_read = atoi(token);
-            if (curr_steering_read >= 1000 and curr_steering_read <= 2000)
+            if (curr_steering_read >= 1000 && curr_steering_read <= 2000)
             {
                 act->steering = curr_steering_read;
             }
@@ -44,7 +44,7 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
         if (token != NULL)
         {
             unsigned int curr_brake_reading = atoi(token);
-            if (curr_brake_reading >= 1000 and curr_brake_reading <= 2000)
+            if (curr_brake_reading >= 1000 && curr_brake_reading <= 2000)
             {
                 act->brake = curr_brake_reading;
             }
