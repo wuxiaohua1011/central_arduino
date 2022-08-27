@@ -49,9 +49,10 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
             }
         }
     }
+    Serial.println(String(act->throttle) + String(" | ") + String(act->steering) + String(" | ") + String(act->steering));
     return act;
 }
-void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarker, uint32_t buf_len = 20)
+void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarker, uint32_t buf_len = 20, bool should_overwrite_state = false)
 {
     char buf[buf_len];
     size_t num_read = Serial.readBytesUntil(endMarker, buf, buf_len);
@@ -62,13 +63,17 @@ void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarke
         {
             // if <'s'>
             writeStateToSerial(vehicleState, startMarker, endMarker);
+            return;
         }
         else if (buf[1] == 'a')
         {
             Actuation *new_act = parseActionData(buf, buf_len, startMarker, endMarker);
-            vehicleState->act->throttle = new_act->throttle;
-            vehicleState->act->steering = new_act->steering;
-            vehicleState->act->brake = new_act->brake;
+            if (should_overwrite_state)
+            {
+                vehicleState->act->throttle = new_act->throttle;
+                vehicleState->act->steering = new_act->steering;
+                vehicleState->act->brake = new_act->brake;
+            }
             return;
         }
     }
@@ -76,13 +81,14 @@ void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarke
     return;
 }
 
-void processSerialCommunication(VehicleState *vehicleState)
+void processSerialCommunication(VehicleState *vehicleState, bool should_overwrite_state)
 {
+
     if (Serial.available() > 0)
     {
         if (Serial.peek() == START_MARKER)
         {
-            parseSerialData(vehicleState, START_MARKER, END_MARKER, 20);
+            parseSerialData(vehicleState, START_MARKER, END_MARKER, 20, should_overwrite_state);
         }
         else
         {

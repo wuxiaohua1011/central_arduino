@@ -11,10 +11,12 @@
 void setup()
 {
   Serial.begin(9600);
-  setupPwmVoltageConverter();
-  setupLED();
-  setupSparkMax();
-  setupRadioLink();
+  // setupPwmVoltageConverter();
+  // setupLED();
+  // setupSparkMax();
+  // setupRadioLink();
+
+  pinMode(8, OUTPUT);
 }
 
 void loop()
@@ -23,12 +25,10 @@ void loop()
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
 
-  // process communication
-  processSerialCommunication(vehicleState);
-
   // actuation
   onAutoDrive();
-  // if (button_pulse_time > 1500)
+
+  // if (button_pulse_time > 1600)
   // {
   //   onAutoDrive();
   // }
@@ -36,7 +36,7 @@ void loop()
   // {
   //   onManualDrive();
   // }
-
+  // vehicleState->act->throttle = 1700;
   actuate(vehicleState->act);
 }
 
@@ -44,19 +44,19 @@ void onAutoDrive()
 {
   // turn steering, throttle, and brake to neutral in case auto mode failed.
   digitalWrite(LED_BUILTIN, HIGH);
-  changeSteeringToNeutral();
-  changeThrottleToNeutral();
-  changeBrakeToNeutral();
-  // TODO: parse serial inputs
+  processSerialCommunication(vehicleState, true);
 }
 
 void onManualDrive()
 {
+
   digitalWrite(LED_BUILTIN, LOW);
+  processSerialCommunication(vehicleState, false);
+
   // if button is not pressed, serial input is ignored, use controller input
-  output_throttle_pwm = throttle_pulse_time;
-  output_steering_pwm = steering_pulse_time;
-  output_brake_pwm = brake_pulse_time;
+  vehicleState->act->throttle = throttle_pulse_time;
+  vehicleState->act->steering = steering_pulse_time;
+  vehicleState->act->brake = brake_pulse_time;
 }
 
 void actuate(Actuation *act)
