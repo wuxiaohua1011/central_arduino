@@ -25,7 +25,8 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
         if (token != NULL)
         {
             unsigned int curr_throttle_read = atoi(token);
-            if (curr_throttle_read > 1000 && curr_throttle_read < 2000)
+            // TODO, remove hardcoding of 1500, 2000 here
+            if (curr_throttle_read >= 1500 && curr_throttle_read <= 2000)
             {
                 act->throttle = curr_throttle_read;
             }
@@ -49,7 +50,6 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
             }
         }
     }
-    Serial.println(String(act->throttle) + String(" | ") + String(act->steering) + String(" | ") + String(act->steering));
     return act;
 }
 void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarker, uint32_t buf_len = 20, bool should_overwrite_state = false)
