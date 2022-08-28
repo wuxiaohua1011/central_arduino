@@ -8,7 +8,7 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker)
     output += String(state->is_auto) + String(",");
     output += String(state->act->throttle) + String(",");
     output += String(state->act->steering) + String(",");
-    output += String(state->act->brake) + String(",");
+    output += String(state->act->brake);
     output += String(endMarker);
     Serial.println(output);
 }
@@ -71,9 +71,10 @@ void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarke
             Actuation *new_act = parseActionData(buf, buf_len, startMarker, endMarker);
             if (should_overwrite_state)
             {
-                vehicleState->act->throttle = new_act->throttle;
-                vehicleState->act->steering = new_act->steering;
-                vehicleState->act->brake = new_act->brake;
+                vehicleState->act = new_act;
+                // vehicleState->act->throttle = new_act->throttle;
+                // vehicleState->act->steering = new_act->steering;
+                // vehicleState->act->brake = new_act->brake;
             }
             return;
         }

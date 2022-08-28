@@ -23,8 +23,8 @@ void loop()
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
   vehicleState->is_auto = determine_auto();
-  // actuation
 
+  // actuation
   if (vehicleState->is_auto)
   {
     onAutoDrive();
@@ -38,7 +38,6 @@ void loop()
 
 void onAutoDrive()
 {
-  // turn steering, throttle, and brake to neutral in case auto mode failed.
   digitalWrite(LED_BUILTIN, HIGH);
   processSerialCommunication(vehicleState, true);
 }
@@ -47,12 +46,12 @@ void onManualDrive()
 {
 
   digitalWrite(LED_BUILTIN, LOW);
-  processSerialCommunication(vehicleState, false);
 
   // if button is not pressed, serial input is ignored, use controller input
   vehicleState->act->throttle = throttle_pulse_time;
   vehicleState->act->steering = steering_pulse_time;
   vehicleState->act->brake = brake_pulse_time;
+  processSerialCommunication(vehicleState, false);
 }
 
 void actuate(Actuation *act)
