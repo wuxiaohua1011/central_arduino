@@ -15,8 +15,6 @@ void setup()
   setupLED();
   setupSparkMax();
   setupRadioLink();
-
-  // pinMode(8, OUTPUT);
 }
 
 void loop()
@@ -24,21 +22,17 @@ void loop()
   // update state
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
+  vehicleState->is_auto = determine_auto();
   // actuation
-  // onAutoDrive();
 
-  // if (button_pulse_time > 1600)
-  // {
-  //   onAutoDrive();
-  // }
-  // else
-  // {
-  //   onManualDrive();
-  // }
-  // vehicleState->act->throttle = 1700;
-  // actuate(vehicleState->act);
-  onManualDrive();
-  // writeStateToSerial(vehicleState, START_MARKER, END_MARKER);
+  if (vehicleState->is_auto)
+  {
+    onAutoDrive();
+  }
+  else
+  {
+    onManualDrive();
+  }
   actuate(vehicleState->act);
 }
 

@@ -40,3 +40,15 @@ void onManualDrive();
  * @retval None
  */
 void onAutoDrive();
+
+bool determine_auto()
+{
+    if (button_pulse_time > 1600)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

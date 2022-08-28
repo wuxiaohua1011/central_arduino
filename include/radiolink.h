@@ -100,7 +100,7 @@ void calcButtonSignal()
     if (button_timer_start != 0)
     {
       // record the pulse time
-      button_pulse_time = constrain(((volatile int)micros() - button_timer_start), 1000, 2000);
+      button_pulse_time = ((volatile int)micros() - button_timer_start);
       // restart the timer
       button_timer_start = 0;
     }

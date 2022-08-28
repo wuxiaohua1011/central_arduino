@@ -5,9 +5,10 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker)
 {
     String output = String(startMarker);
     output += String(state->speed) + String(",");
+    output += String(state->is_auto) + String(",");
     output += String(state->act->throttle) + String(",");
     output += String(state->act->steering) + String(",");
-    output += String(state->act->brake);
+    output += String(state->act->brake) + String(",");
     output += String(endMarker);
     Serial.println(output);
 }
