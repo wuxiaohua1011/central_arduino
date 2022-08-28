@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <pin.h>
-int max_hz = 4000; // ~5v
-int min_hz = 40;   // ~0v
+int max_hz = 3500; // ~5v
+int min_hz = 50;   // ~0v
 int output_throttle_pwm = 1500;
 int output_throttle_max = 2000;
 int output_throttle_neu = 1500;
@@ -20,9 +20,14 @@ void output_helper(uint32_t duration, double percent_duty_cycle, uint32_t pinout
 
 void actuateFromArduinoPWM(int microseconds)
 {
-  int output_hz = map(microseconds, output_throttle_min, output_throttle_max, min_hz, max_hz);
+  int output_hz = constrain(map(microseconds, output_throttle_min, output_throttle_max, min_hz, max_hz), 125, 3500);
   uint32_t output_duration = uint32_t(1000000 / output_hz);
-  output_helper(output_duration, 0.1, 8);
+  uint32_t time_high = uint32_t(output_duration * percent_duty_cycle);
+  uint32_t time_low = output_duration - time_high;
+  digitalWrite(THROTTLE_OUTPUT_PIN, HIGH);
+  delayMicroseconds(time_high); // Approximately 10% duty cycle @ 1KHz
+  digitalWrite(THROTTLE_OUTPUT_PIN, LOW);
+  delayMicroseconds(time_low);
 }
 
 /**

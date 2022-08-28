@@ -10,11 +10,10 @@ volatile int steering_last_interrupt_time;
 volatile int brake_last_interrupt_time;
 volatile int button_last_interrupt_time;
 
-
-volatile int throttle_pulse_time;
-volatile int steering_pulse_time;
-volatile int brake_pulse_time;
-volatile int button_pulse_time;
+volatile int throttle_pulse_time = 1500;
+volatile int steering_pulse_time = 1500;
+volatile int brake_pulse_time = 1500;
+volatile int button_pulse_time = 1500;
 
 void calcThrottleSignal()
 {
@@ -32,7 +31,7 @@ void calcThrottleSignal()
     if (throttle_timer_start != 0)
     {
       // record the pulse time
-      throttle_pulse_time = ((volatile int)micros() - throttle_timer_start);
+      throttle_pulse_time = constrain(((volatile int)micros() - throttle_timer_start), 1000, 2000);
       // restart the timer
       throttle_timer_start = 0;
     }
@@ -55,7 +54,7 @@ void calcSteeringSignal()
     if (steering_timer_start != 0)
     {
       // record the pulse time
-      steering_pulse_time = ((volatile int)micros() - steering_timer_start);
+      steering_pulse_time = constrain(((volatile int)micros() - steering_timer_start), 1000, 2000);
       // restart the timer
       steering_timer_start = 0;
     }
@@ -78,7 +77,7 @@ void calcBrakeSignal()
     if (brake_timer_start != 0)
     {
       // record the pulse time
-      brake_pulse_time = ((volatile int)micros() - brake_timer_start);
+      brake_pulse_time = constrain(((volatile int)micros() - brake_timer_start), 1000, 2000);
       // restart the timer
       brake_timer_start = 0;
     }
@@ -101,14 +100,15 @@ void calcButtonSignal()
     if (button_timer_start != 0)
     {
       // record the pulse time
-      button_pulse_time = ((volatile int)micros() - button_timer_start);
+      button_pulse_time = constrain(((volatile int)micros() - button_timer_start), 1000, 2000);
       // restart the timer
       button_timer_start = 0;
     }
   }
 }
 
-void setupRadioLink() {
+void setupRadioLink()
+{
   throttle_timer_start = 0;
   steering_timer_start = 0;
   brake_timer_start = 0;
@@ -118,4 +118,3 @@ void setupRadioLink() {
   attachInterrupt(BRAKE_SOURCE, calcBrakeSignal, CHANGE);
   attachInterrupt(BUTTON_SOURCE, calcButtonSignal, CHANGE);
 }
-
