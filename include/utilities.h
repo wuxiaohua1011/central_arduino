@@ -9,4 +9,6 @@ struct VehicleState
   float speed = -1.0;
   bool is_auto = false;
   Actuation *act = new Actuation();
+  bool isSteeringLeftLimiterOn = false;
+  bool isSteeringRightLimiterOn = false;
 };
