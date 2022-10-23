@@ -3,7 +3,7 @@
 #include <Arduino.h>
 Servo servoSteering;
 Servo servoBrake;
-
+const int NEUTRAL_STEERING_PWM = 1500;
 int output_steering_pwm = 1500;
 int output_brake_pwm = 1500;
 int output_steering_max = 1700;

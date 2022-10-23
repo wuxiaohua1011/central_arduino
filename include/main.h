@@ -6,6 +6,7 @@
 #include <pwm_voltage_converter.h>
 #include <speed_estimation.h>
 #include <SerialCommunications.h>
+#include <steering_limiter.h>
 
 bool readInProgress = false;
 bool newDataFromPC = false;
@@ -50,5 +51,25 @@ bool determine_auto()
     else
     {
         return false;
+    }
+}
+
+/**
+ * @brief  Given a Vehicle State, limit its actuation by using limiter readings
+ * @note this function is to be called BEFORE actuate
+ * @retval None
+ */
+void applyVehicleSafetyPolicy(VehicleState *state)
+{
+    if (state->isSteeringLeftLimiterOn)
+    {
+        // only allow steering to the right
+        state->act->steering = max(NEUTRAL_STEERING_PWM, state->act->steering)
+    }
+
+    if (state->isSteeringRightLimiterOn)
+    {
+        // only allow steering to the left
+        state->act->steering = min(NEUTRAL_STEERING_PWM, state->act->steering)
     }
 }

@@ -15,6 +15,7 @@ void setup()
   setupLED();
   setupSparkMax();
   setupRadioLink();
+  setupSteeringLimiters();
 }
 
 void loop()
@@ -23,7 +24,6 @@ void loop()
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
   vehicleState->is_auto = determine_auto();
-  updateLimiterStates(vehicleState);
 
   // actuation
   if (vehicleState->is_auto)
@@ -34,6 +34,7 @@ void loop()
   {
     onManualDrive();
   }
+  applyVehicleSafetyPolicy(vehicleState);
   actuate(vehicleState->act);
 }
 
@@ -57,7 +58,6 @@ void onManualDrive()
 
 void actuate(Actuation *act)
 {
-  // TODO: detect limiters
   writeToSteering(act->steering);
   writeToBrake(act->brake);
   writeToThrottle(act->throttle);
