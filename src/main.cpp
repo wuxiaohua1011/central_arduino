@@ -15,6 +15,7 @@ void setup()
   setupLED();
   setupSparkMax();
   setupRadioLink();
+  setupSteeringLimiters();
 }
 
 void loop()
@@ -33,6 +34,7 @@ void loop()
   {
     onManualDrive();
   }
+  applyVehicleSafetyPolicy(vehicleState);
   actuate(vehicleState->act);
 }
 
