@@ -7,3 +7,6 @@
 [submodule "lib/CircularBuffer"]
 	path = lib/CircularBuffer
 	url = https://github.com/rlogiacco/CircularBuffer
+[submodule "lib/SEEED_Arduino_CAN"]
+	path = lib/SEEED_Arduino_CAN
+	url = https://github.com/wuxiaohua1011/Seeed_Arduino_CAN

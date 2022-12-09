@@ -2,14 +2,12 @@
 #include <pin.h>
 #include <Arduino.h>
 Servo servoSteering;
-Servo servoBrake;
 const int NEUTRAL_STEERING_PWM = 1500;
 int output_steering_pwm = 1500;
 int output_brake_pwm = 1500;
 int output_steering_max = 1700;
 int output_steering_min = 1300;
-int output_brake_max = 1800;
-int output_brake_min = 1500;
+
 void checkServoAttachments()
 {
   if (servoSteering.attached() == false)
@@ -17,20 +15,11 @@ void checkServoAttachments()
     Serial.println("Reattaching steering pin");
     servoSteering.attach(STEERING_OUTPUT_PIN);
   }
-  if (servoBrake.attached() == false)
-  {
-    Serial.println("Reattaching brake pin");
-    servoBrake.attach(BRAKE_OUTPUT_PIN);
-  }
 }
 
 void writeToSteering(int steering)
 {
   servoSteering.writeMicroseconds(constrain(steering, output_steering_min, output_steering_max));
-}
-void writeToBrake(int brake)
-{
-  servoBrake.writeMicroseconds(constrain(brake, output_brake_min, output_brake_max));
 }
 
 void changeSteeringToNeutral()
@@ -46,5 +35,4 @@ void changeBrakeToNeutral()
 void setupSparkMax()
 {
   servoSteering.attach(STEERING_OUTPUT_PIN);
-  servoBrake.attach(BRAKE_OUTPUT_PIN);
 }

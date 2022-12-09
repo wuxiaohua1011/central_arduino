@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include <led.h>
-#include "radiolink.h"
+#include <radiolink.h>
 #include <spark_max.h>
 #include <pwm_voltage_converter.h>
 #include <speed_estimation.h>
 #include <SerialCommunications.h>
 #include <steering_limiter.h>
+#include <brake.h>
 
 bool readInProgress = false;
 bool newDataFromPC = false;
@@ -64,12 +65,12 @@ void applyVehicleSafetyPolicy(VehicleState *state)
     if (state->isSteeringLeftLimiterOn)
     {
         // only allow steering to the right
-        state->act->steering = max(NEUTRAL_STEERING_PWM, state->act->steering)
+        state->act->steering = max(NEUTRAL_STEERING_PWM, state->act->steering);
     }
 
     if (state->isSteeringRightLimiterOn)
     {
         // only allow steering to the left
-        state->act->steering = min(NEUTRAL_STEERING_PWM, state->act->steering)
+        state->act->steering = min(NEUTRAL_STEERING_PWM, state->act->steering);
     }
 }

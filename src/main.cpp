@@ -16,6 +16,7 @@ void setup()
   setupSparkMax();
   setupRadioLink();
   setupSteeringLimiters();
+  setupBrake();
 }
 
 void loop()
@@ -24,16 +25,17 @@ void loop()
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
   vehicleState->is_auto = determine_auto();
-
+  updateLimiterStates(vehicleState);
   // actuation
-  if (vehicleState->is_auto)
-  {
-    onAutoDrive();
-  }
-  else
-  {
-    onManualDrive();
-  }
+  // if (vehicleState->is_auto)
+  // {
+  //   onAutoDrive();
+  // }
+  // else
+  // {
+  //   onManualDrive();
+  // }
+  onManualDrive();
   applyVehicleSafetyPolicy(vehicleState);
   actuate(vehicleState->act);
 }

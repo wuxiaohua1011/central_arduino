@@ -85,7 +85,6 @@ void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarke
 
 void processSerialCommunication(VehicleState *vehicleState, bool should_overwrite_state)
 {
-
     if (Serial.available() > 0)
     {
         if (Serial.peek() == START_MARKER)

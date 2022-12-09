@@ -14,7 +14,6 @@ void updateLimiterStates(VehicleState *state)
 {
     state->isSteeringLeftLimiterOn = isLimiterOn(STEERING_LEFT_LIMITER);
     state->isSteeringRightLimiterOn = isLimiterOn(STEERING_RIGHT_LIMITER);
-    Serial.println(state->isSteeringLeftLimiterOn);
 }
 
 void setupSteeringLimiters()
