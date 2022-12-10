@@ -11,4 +11,5 @@ struct VehicleState
   Actuation *act = new Actuation();
   bool isSteeringLeftLimiterOn = false;
   bool isSteeringRightLimiterOn = false;
+  float angle = 0.0;
 };

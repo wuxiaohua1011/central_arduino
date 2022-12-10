@@ -25,6 +25,7 @@ void loop()
   loopSpeedEstimation();
   vehicleState->speed = getSpeed();
   vehicleState->is_auto = determine_auto();
+  vehicleState->angle = measureAngle();
   updateLimiterStates(vehicleState);
   // actuation
   // if (vehicleState->is_auto)

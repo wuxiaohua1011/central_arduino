@@ -3,7 +3,7 @@
 #include "mcp2515_can.h"
 #define CAN_EXT_ID 1
 #define CAN_RTR_BIT 8
-const float MIN_DIST = 0.0;                // Minimun distance for actuator
+const float MIN_DIST = 0.0;                // Minimum distance for actuator
 const float MAX_DIST = 3.0;                // Maximum safe distance that the actuator can move (inches)
 const unsigned long COMMAND_ID = 0xFF0000; // Default command ID for CAN Actuator
 const unsigned long REPORT_ID = 0xFF0001;  // Default report ID for CAN Actuator
