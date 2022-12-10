@@ -2,10 +2,9 @@
 
 const float LEFT_ANGLE = -30.0; // Minimun distance for actuator
 const float RIGHT_ANGLE = 30.0; // Maximum safe distance that the actuator can move (inches)
-int measureAngle()
+float measureAngle()
 {
-    // read the input on analog pin 0:
-    int sensorValue = analogRead(STEERING_ANGLE_SENSOR);
-    float angle = map(sensorValue, 0, 1023, LEFT_ANGLE, RIGHT_ANGLE);
+    float sensorValue = analogRead(STEERING_ANGLE_SENSOR);
+    float angle = (sensorValue - 0) / (1023 - 0) * (RIGHT_ANGLE - LEFT_ANGLE) + LEFT_ANGLE;
     return angle;
 }
