@@ -8,6 +8,7 @@
 #include <SerialCommunications.h>
 #include <steering_limiter.h>
 #include <brake.h>
+#include <angle_sensor.h>
 
 bool readInProgress = false;
 bool newDataFromPC = false;

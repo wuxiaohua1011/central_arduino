@@ -11,33 +11,34 @@
 void setup()
 {
   Serial.begin(9600);
-  setupPwmVoltageConverter();
-  setupLED();
-  setupSparkMax();
-  setupRadioLink();
-  setupSteeringLimiters();
-  setupBrake();
+  // setupPwmVoltageConverter();
+  // setupLED();
+  // setupSparkMax();
+  // setupRadioLink();
+  // setupSteeringLimiters();
+  // setupBrake();
 }
 
 void loop()
 {
-  // update state
-  loopSpeedEstimation();
-  vehicleState->speed = getSpeed();
-  vehicleState->is_auto = determine_auto();
-  updateLimiterStates(vehicleState);
-  // actuation
-  // if (vehicleState->is_auto)
-  // {
-  //   onAutoDrive();
-  // }
-  // else
-  // {
-  //   onManualDrive();
-  // }
-  onManualDrive();
-  applyVehicleSafetyPolicy(vehicleState);
-  actuate(vehicleState->act);
+  Serial.println(measureAngle());
+  // // update state
+  // loopSpeedEstimation();
+  // vehicleState->speed = getSpeed();
+  // vehicleState->is_auto = determine_auto();
+  // updateLimiterStates(vehicleState);
+  // // actuation
+  // // if (vehicleState->is_auto)
+  // // {
+  // //   onAutoDrive();
+  // // }
+  // // else
+  // // {
+  // //   onManualDrive();
+  // // }
+  // onManualDrive();
+  // applyVehicleSafetyPolicy(vehicleState);
+  // actuate(vehicleState->act);
 }
 
 void onAutoDrive()
