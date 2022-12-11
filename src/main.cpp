@@ -16,7 +16,7 @@ void setup()
   setupSparkMax();
   setupRadioLink();
   setupSteeringLimiters();
-  setupBrake();
+  setupBrake(); // this will block program if CAN is not initialized
 }
 
 void loop()
