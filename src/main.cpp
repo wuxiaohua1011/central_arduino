@@ -1,3 +1,7 @@
+// Copyright 2023 michael. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 /**
  * By Michael Wu on July 9, 2022.
  * reference from https://www.camelsoftware.com/2015/12/25/reading-pwm-signals-from-an-rc-receiver-with-arduino/
