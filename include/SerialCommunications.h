@@ -3,57 +3,61 @@
 // license that can be found in the LICENSE file.
 
 #include <utilities.h>
+#include <ArduinoJson.h>
+
 const char END_MARKER = '>';
 const char START_MARKER = '<';
+DynamicJsonDocument stateJSON(128);
+
+char buf[128];
+
 void writeStateToSerial(VehicleState *state, char startMarker, char endMarker)
 {
-    String output = String(startMarker);
-    output += String(state->speed) + String(",");
-    output += String(state->is_auto) + String(",");
-    output += String(state->act->throttle) + String(",");
-    output += String(state->act->steering) + String(",");
-    output += String(state->act->brake);
-    output += String(endMarker);
-    Serial.println(output);
+    Serial.print(state->speed, 2);
+    Serial.print(",");
+    Serial.print(state->is_auto);
+    Serial.print(",");
+    Serial.print(state->act->throttle);
+    Serial.print(",");
+    Serial.print(state->act->steering);
+    Serial.print(",");
+    Serial.print(state->act->brake);
+    Serial.println();
 }
 Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMarker)
 {
     char *token = strtok(buf, ",");
     Actuation *act = new Actuation();
+    float curr_throttle_read = 0.0;
+    float curr_steering_read = 0.0;
+    float curr_brake_read = 0.0;
 
     if (token[0] == startMarker)
     {
+        token = strtok(NULL, ",");
         if (token != NULL)
-        { // the "a" in <a, THROTTLE, STEERING, BRAKE>
+        {
+            curr_throttle_read = atof(token);
+            if (curr_throttle_read  <= -1 || 1 <= curr_throttle_read ) return act;
+            // TODO: 
         }
         token = strtok(NULL, ",");
         if (token != NULL)
         {
-            unsigned int curr_throttle_read = atoi(token);
-            // TODO, remove hardcoding of 1500, 2000 here
-            if (curr_throttle_read >= 1500 && curr_throttle_read <= 2000)
-            {
-                act->throttle = curr_throttle_read;
-            }
+            curr_steering_read = atof(token);
+            if (curr_steering_read <= -1 || 1 <= curr_steering_read) return act;
         }
         token = strtok(NULL, ",");
         if (token != NULL)
         {
-            unsigned int curr_steering_read = atoi(token);
-            if (curr_steering_read >= 1000 && curr_steering_read <= 2000)
-            {
-                act->steering = curr_steering_read;
-            }
+            curr_brake_read = atof(token);
+            if (curr_brake_read <= -1 || 1 <= curr_brake_read) return act;
         }
-        token = strtok(NULL, ",");
-        if (token != NULL)
-        {
-            unsigned int curr_brake_reading = atoi(token);
-            if (curr_brake_reading >= 1000 && curr_brake_reading <= 2000)
-            {
-                act->brake = curr_brake_reading;
-            }
-        }
+        
+        // convert float [-1, 1] to [1000, 2000]
+        act->throttle = map(curr_throttle_read, -1, 1, 1000, 2000);
+        act->steering = map(curr_steering_read, -1, 1, 1000, 2000);
+        act->brake = map(curr_brake_read, -1, 1, 1000, 2000);
     }
     return act;
 }

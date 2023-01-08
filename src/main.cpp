@@ -14,13 +14,13 @@
 
 void setup()
 {
-  Serial.begin(9600);
-  setupPwmVoltageConverter();
-  setupLED();
-  setupSparkMax();
-  setupRadioLink();
-  setupSteeringLimiters();
-  setupBrake();
+  Serial.begin(115200);
+  // setupPwmVoltageConverter();
+  // setupLED();
+  // setupSparkMax();
+  // setupRadioLink();
+  // setupSteeringLimiters();
+  // setupBrake(); // this is a blocking call
 }
 
 void loop()
@@ -34,7 +34,7 @@ void loop()
   // actuation
   // if (vehicleState->is_auto)
   // {
-    onAutoDrive();
+  onAutoDrive();
   // }
   // else
   // {
