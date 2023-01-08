@@ -34,15 +34,15 @@ void loop()
   // actuation
   // if (vehicleState->is_auto)
   // {
-  //   onAutoDrive();
+    onAutoDrive();
   // }
   // else
   // {
   //   onManualDrive();
   // }
-  onManualDrive();
-  applyVehicleSafetyPolicy(vehicleState);
-  actuate(vehicleState->act);
+  // onManualDrive();
+  // applyVehicleSafetyPolicy(vehicleState);
+  // actuate(vehicleState->act);
 }
 
 void onAutoDrive()
