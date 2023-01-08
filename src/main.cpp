@@ -15,11 +15,11 @@
 void setup()
 {
   Serial.begin(115200);
-  // setupPwmVoltageConverter();
-  // setupLED();
-  // setupSparkMax();
-  // setupRadioLink();
-  // setupSteeringLimiters();
+  setupPwmVoltageConverter();
+  setupLED();
+  setupSparkMax();
+  setupRadioLink();
+  setupSteeringLimiters();
   // setupBrake(); // this is a blocking call
 }
 
@@ -41,8 +41,8 @@ void loop()
   //   onManualDrive();
   // }
   // onManualDrive();
-  // applyVehicleSafetyPolicy(vehicleState);
-  // actuate(vehicleState->act);
+  applyVehicleSafetyPolicy(vehicleState);
+  actuate(vehicleState->act);
 }
 
 void onAutoDrive()
@@ -66,6 +66,6 @@ void onManualDrive()
 void actuate(Actuation *act)
 {
   writeToSteering(act->steering);
-  writeToBrake(act->brake);
+  // writeToBrake(act->brake);
   writeToThrottle(act->throttle);
 }

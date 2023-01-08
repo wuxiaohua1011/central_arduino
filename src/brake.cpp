@@ -114,23 +114,24 @@ void setupBrake()
 /**
  * @param brake value from 1000 - 2000
  */
-void writeToBrake(int brake)
+void writeToBrake(float brake)
 {
-    float brake_out = float(constrain(brake, output_brake_min, output_brake_max));
+    // TODO: revamp
+    // float brake_out = float(constrain(brake, output_brake_min, output_brake_max));
 
-    if (brake_out != prev_brake && brake_out > 1800)
-    {
-        prev_brake = brake_out;
-        float actuator_out = map(brake_out, output_brake_min, output_brake_max, MIN_DIST, MAX_DIST);
-        setActuatorPosition(actuator_out);
-        return;
-    }
+    // if (brake_out != prev_brake && brake_out > 1800)
+    // {
+    //     prev_brake = brake_out;
+    //     float actuator_out = map(brake_out, output_brake_min, output_brake_max, MIN_DIST, MAX_DIST);
+    //     setActuatorPosition(actuator_out);
+    //     return;
+    // }
 
-    if (brake_out != prev_brake && brake_out < 1200)
-    {
-        prev_brake = brake_out;
-        float actuator_out = map(brake_out, output_brake_min, output_brake_max, MIN_DIST, MAX_DIST);
-        setActuatorPosition(actuator_out);
-        return;
-    }
+    // if (brake_out != prev_brake && brake_out < 1200)
+    // {
+    //     prev_brake = brake_out;
+    //     float actuator_out = map(brake_out, output_brake_min, output_brake_max, MIN_DIST, MAX_DIST);
+    //     setActuatorPosition(actuator_out);
+    //     return;
+    // }
 }

@@ -55,9 +55,10 @@ Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMa
         }
         
         // convert float [-1, 1] to [1000, 2000]
-        act->throttle = map(curr_throttle_read, -1, 1, 1000, 2000);
-        act->steering = map(curr_steering_read, -1, 1, 1000, 2000);
-        act->brake = map(curr_brake_read, -1, 1, 1000, 2000);
+        act->throttle = curr_throttle_read;
+        act->steering = curr_steering_read;
+        act->brake = curr_brake_read;
+        return act;
     }
     return act;
 }

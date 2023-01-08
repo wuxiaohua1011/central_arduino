@@ -21,9 +21,11 @@ void checkServoAttachments()
   }
 }
 
-void writeToSteering(int steering)
+void writeToSteering(float steering)
 {
-  servoSteering.writeMicroseconds(constrain(steering, output_steering_min, output_steering_max));
+  // convert [-1, 1] to [1000, 2000]
+  int steering_pwm = map(steering, -1, 1, output_steering_min, output_steering_max);
+  servoSteering.writeMicroseconds(constrain(steering_pwm, output_steering_min, output_steering_max));
 }
 
 void changeSteeringToNeutral()

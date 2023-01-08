@@ -4,9 +4,9 @@
 
 struct Actuation
 {
-  int throttle = 1500;
-  int steering = 1500;
-  int brake = 1500;
+  float throttle = 0.0f;
+  float steering = 0.0f;
+  float brake = 0.0f;
 };
 struct VehicleState
 {

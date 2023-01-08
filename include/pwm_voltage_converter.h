@@ -4,6 +4,7 @@
 
 #include <Arduino.h>
 #include <pin.h>
+#include <SAMDUE_PWM.h>
 int max_hz = 3500; // ~5v
 int min_hz = 50;   // ~0v
 int output_throttle_pwm = 1500;
@@ -11,6 +12,11 @@ int output_throttle_max = 2000;
 int output_throttle_neu = 1500;
 int output_throttle_min = 1500;
 double percent_duty_cycle = 0.1;
+
+float idle_frequency = 50.0f;
+float duty_cycle = 0.0f;
+SAMDUE_PWM *PWM_Instance;
+
 
 void output_helper(uint32_t duration, double percent_duty_cycle, uint32_t pinout)
 {
@@ -22,16 +28,11 @@ void output_helper(uint32_t duration, double percent_duty_cycle, uint32_t pinout
   delayMicroseconds(time_low);
 }
 
-void actuateFromArduinoPWM(int microseconds)
+void actuateFromArduinoPWM(float throttle)
 {
-  int output_hz = constrain(map(microseconds, output_throttle_min, output_throttle_max, min_hz, max_hz), 125, 3500);
-  uint32_t output_duration = uint32_t(1000000 / output_hz);
-  uint32_t time_high = uint32_t(output_duration * percent_duty_cycle);
-  uint32_t time_low = output_duration - time_high;
-  digitalWrite(THROTTLE_OUTPUT_PIN, HIGH);
-  delayMicroseconds(time_high); // Approximately 10% duty cycle @ 1KHz
-  digitalWrite(THROTTLE_OUTPUT_PIN, LOW);
-  delayMicroseconds(time_low);
+  throttle = constrain(throttle, 0, 1);
+  float frequency = map(throttle, 0, 1, min_hz, max_hz);
+  PWM_Instance->setPWM(THROTTLE_OUTPUT_PIN, frequency, duty_cycle);
 }
 
 /**
@@ -41,7 +42,8 @@ void actuateFromArduinoPWM(int microseconds)
  */
 void setupPwmVoltageConverter()
 {
-  pinMode(THROTTLE_OUTPUT_PIN, OUTPUT);
+  // pinMode(THROTTLE_OUTPUT_PIN, OUTPUT);
+  PWM_Instance = new SAMDUE_PWM(THROTTLE_OUTPUT_PIN, idle_frequency, 20.0f);
 }
 
 /**
@@ -49,7 +51,7 @@ void setupPwmVoltageConverter()
  * @note
  * @retval None
  */
-void writeToThrottle(int throttle)
+void writeToThrottle(float throttle)
 {
   actuateFromArduinoPWM(throttle);
 }
