@@ -3,7 +3,8 @@
         "mstd_iterator": "cpp",
         "array": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "*.tcc": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "python.autoComplete.extraPaths": [

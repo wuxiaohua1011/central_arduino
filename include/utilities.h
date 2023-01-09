@@ -8,11 +8,19 @@ struct Actuation
   float steering = 0.0f;
   float brake = 0.0f;
 };
+
+struct TargetActions
+{
+  float speed = 0.0;
+  float steering = 0.0;
+  float brake = 0.0;
+};
 struct VehicleState
 {
+  TargetActions *target = new TargetActions();
+  Actuation *act = new Actuation();
   float speed = -1.0;
   bool is_auto = false;
-  Actuation *act = new Actuation();
   bool isSteeringLeftLimiterOn = false;
   bool isSteeringRightLimiterOn = false;
   float angle = 0.0;
