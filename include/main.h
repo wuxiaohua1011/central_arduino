@@ -13,6 +13,7 @@
 #include <steering_limiter.h>
 #include <brake.h>
 #include <angle_sensor.h>
+#include <controls.h>
 
 bool readInProgress = false;
 bool newDataFromPC = false;

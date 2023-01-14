@@ -3,11 +3,9 @@
 // license that can be found in the LICENSE file.
 
 #include <utilities.h>
-#include <ArduinoJson.h>
 
 const char END_MARKER = '>';
 const char START_MARKER = '<';
-StaticJsonDocument<512> stateJSON;
 
 void writeStateToSerial(VehicleState *state, char startMarker, char endMarker){
     // stateJSON["speed"] = state->speed;

@@ -49,6 +49,8 @@ void onAutoDrive()
 {
   digitalWrite(LED_BUILTIN, HIGH);
   processSerialCommunication(vehicleState, true);
+  vehicleState->act->throttle = run_speed_PID(vehicleState->speed,  vehicleState->target->speed, 1, 0, 0);
+  vehicleState->act->steering = run_steering_PID(vehicleState->angle, vehicleState->target->steering, 1, 0, 0);
 }
 
 void onManualDrive()
