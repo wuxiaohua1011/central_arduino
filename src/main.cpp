@@ -31,14 +31,16 @@ void loop()
   vehicleState->is_auto = determine_auto();
   vehicleState->angle = measureAngle();
   updateLimiterStates(vehicleState);
+
+  // Serial.println(vehicleState->speed);
   // actuation
   // if (vehicleState->is_auto)
   // {
-  onAutoDrive();
+  // onAutoDrive();
   // }
   // else
   // {
-  //   onManualDrive();
+  onManualDrive();
   // }
   // onManualDrive();
   applyVehicleSafetyPolicy(vehicleState);
@@ -48,8 +50,10 @@ void loop()
 void onAutoDrive()
 {
   digitalWrite(LED_BUILTIN, HIGH);
-  processSerialCommunication(vehicleState, true);
-  vehicleState->act->throttle = run_speed_PID(vehicleState->speed,  vehicleState->target->speed, 1, 0, 0);
+  // processSerialCommunication(vehicleState, true);
+  float throttle_requested = run_speed_PID(vehicleState->speed, vehicleState->target->speed, 1, 0, 0);
+  // Serial.println(throttle_requested);
+  vehicleState->act->throttle = constrain(throttle_requested, 0, 1);
   vehicleState->act->steering = run_steering_PID(vehicleState->angle, vehicleState->target->steering, 1, 0, 0);
 }
 
@@ -57,11 +61,10 @@ void onManualDrive()
 {
 
   digitalWrite(LED_BUILTIN, LOW);
-
   // if button is not pressed, serial input is ignored, use controller input
-  vehicleState->act->throttle = throttle_pulse_time;
-  vehicleState->act->steering = steering_pulse_time;
-  vehicleState->act->brake = brake_pulse_time;
+  vehicleState->act->throttle = constrain(arduinoToROARConvert(throttle_pulse_time), 0, 1);
+  vehicleState->act->steering = arduinoToROARConvert(steering_pulse_time);
+  vehicleState->act->brake = arduinoToROARConvert(brake_pulse_time);
   processSerialCommunication(vehicleState, false);
 }
 

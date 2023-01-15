@@ -14,7 +14,7 @@ int output_throttle_min = 1500;
 double percent_duty_cycle = 0.1;
 
 float idle_frequency = 50.0f;
-float duty_cycle = 0.0f;
+float duty_cycle = 50.0f;
 SAMDUE_PWM *PWM_Instance;
 
 
@@ -31,7 +31,7 @@ void output_helper(uint32_t duration, double percent_duty_cycle, uint32_t pinout
 void actuateFromArduinoPWM(float throttle)
 {
   throttle = constrain(throttle, 0, 1);
-  float frequency = map(throttle, 0, 1, min_hz, max_hz);
+  float frequency = (throttle - 0) / (1 - 0) * (max_hz - min_hz) + min_hz;
   PWM_Instance->setPWM(THROTTLE_OUTPUT_PIN, frequency, duty_cycle);
 }
 
@@ -54,4 +54,9 @@ void setupPwmVoltageConverter()
 void writeToThrottle(float throttle)
 {
   actuateFromArduinoPWM(throttle);
+}
+
+float arduinoToROARConvert(int pulse_time)
+{
+  return (pulse_time - 1000.0) / (2000.0 - 1000) * (1 - -1) + -1;
 }
