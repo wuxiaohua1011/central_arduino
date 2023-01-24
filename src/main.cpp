@@ -51,10 +51,8 @@ void onAutoDrive()
 {
   digitalWrite(LED_BUILTIN, HIGH);
   // processSerialCommunication(vehicleState, true);
-  float throttle_requested = run_speed_PID(vehicleState->speed, vehicleState->target->speed, 1, 0, 0);
-  // Serial.println(throttle_requested);
-  vehicleState->act->throttle = constrain(throttle_requested, 0, 1);
-  vehicleState->act->steering = run_steering_PID(vehicleState->angle, vehicleState->target->steering, 1, 0, 0);
+  vehicleState->act->throttle = vehicleState->target_actuation->throttle;
+  vehicleState->act->steering = vehicleState->target_actuation->steering;
 }
 
 void onManualDrive()

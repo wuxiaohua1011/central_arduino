@@ -18,12 +18,6 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker){
     // // stateJSON["target.steering"] = state->target->steering;
     // // stateJSON["target.speed"]=state->target->speed;
     // serializeMsgPack(stateJSON, Serial);
-    Serial.print(state->target->speed);
-    Serial.print(",");
-    Serial.print(state->target->steering);
-    Serial.print(",");
-    Serial.print(state->target->brake);
-    Serial.print(",");
 
     Serial.print(state->act->throttle);
     Serial.print(",");
@@ -31,19 +25,19 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker){
     Serial.print(",");
     Serial.print(state->act->brake);
     Serial.print(",");
-
-    Serial.print(state->speed, 2);
-    Serial.print(",");
     Serial.print(state->is_auto);
     Serial.print(",");
     Serial.print(state->angle);
 
     Serial.println();
-} TargetActions *parseActionData(char *buf, uint32_t len, char startMarker, char endMarker)
+} 
+
+
+Actuation *parseActionData(char *buf, uint32_t len, char startMarker, char endMarker)
 {
     char *token = strtok(buf, ",");
-    TargetActions *act = new TargetActions();
-    float curr_speed_reading = 0.0;
+    Actuation *act = new Actuation();
+    float curr_throttle_reading = 0.0;
     float curr_steering_read = 0.0;
     float curr_brake_read = 0.0;
     if (token[0] == startMarker)
@@ -51,8 +45,8 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker){
         token = strtok(NULL, ",");
         if (token != NULL)
         {
-            curr_speed_reading = atof(token);
-            if (curr_speed_reading <= -1 || 1 <= curr_speed_reading)
+            curr_throttle_reading = atof(token);
+            if (curr_throttle_reading <= 0 || 1 <= curr_throttle_reading)
                 return act;
         }
         token = strtok(NULL, ",");
@@ -67,7 +61,7 @@ void writeStateToSerial(VehicleState *state, char startMarker, char endMarker){
             curr_brake_read = atof(token);
             if (curr_brake_read <= -1 || 1 <= curr_brake_read) return act;
         }
-        act->speed = curr_speed_reading;
+        act->throttle = curr_throttle_reading;
         act->steering = curr_steering_read;
         act->brake = curr_brake_read;
         return act;
@@ -88,10 +82,10 @@ void parseSerialData(VehicleState *vehicleState, char startMarker, char endMarke
         }
         else if (buf[1] == 'a')
         {
-            TargetActions *new_target = parseActionData(buf, buf_len, startMarker, endMarker);
+            Actuation *new_act = parseActionData(buf, buf_len, startMarker, endMarker);
             if (should_overwrite_state)
             {
-                vehicleState->target = new_target;
+                vehicleState->target_actuation = new_act;
             }
             return;
         }

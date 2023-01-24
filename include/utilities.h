@@ -9,15 +9,9 @@ struct Actuation
   float brake = 0.0f;
 };
 
-struct TargetActions
-{
-  float speed = 0.0;
-  float steering = 0.0;
-  float brake = 0.0;
-};
 struct VehicleState
 {
-  TargetActions *target = new TargetActions();
+  Actuation *target_actuation = new Actuation();
   Actuation *act = new Actuation();
   float speed = -1.0;
   bool is_auto = false;
