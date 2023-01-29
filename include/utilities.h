@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+#ifndef _UTILITIES_h
+#define _UTILITIES_h
 struct Actuation
 {
   float throttle = 0.0f;
@@ -19,3 +21,4 @@ struct VehicleState
   bool isSteeringRightLimiterOn = false;
   float angle = 0.0;
 };
+#endif //_UTILITIES_h

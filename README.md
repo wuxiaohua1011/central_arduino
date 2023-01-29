@@ -5,22 +5,6 @@
 -->
 
 # Embedded software for autonomous GoKart
-
-File structure
-- `main.cpp`
-- `include`
-  - `led.h`
-  - `main.h`
-  - `pin.h`
-  - `pwm_voltage_converter.h`
-  - `radiolink.h`
-  - `SerialCommunication.h`
-  - `spark_max.h`
-  - `speed_estimation.h`
-  - `steering_limiter.h`
-  - `utilities.h`
-
-
 `main.cpp` contains the driver function, namely `setup()` and `loop()`. 
 the `include` directory contains logic for each component. We separate them out for ease of debugging and reduce merge conflicts
 
@@ -47,6 +31,43 @@ if ACTION = `a`, the arduino is expecting throttle, steering, brake respectively
 The Arduino is not going to respond to `action` if the manual control mode is `ON` for the vehicle. To turn manual control `OFF`, simply press and hold the button on the Radio controller. 
 
 
+##### The Include directory
+This directory is intended for project header files.
+
+A header file is a file containing C declarations and macro definitions
+to be shared between several project source files. You request the use of a
+header file in your project source file (C, C++, etc) located in `src` folder
+by including it, with the C preprocessing directive `#include'.
+
+```src/main.c
+
+#include "header.h"
+
+int main (void)
+{
+ ...
+}
+```
+
+Including a header file produces the same results as copying the header file
+into each source file that needs it. Such copying would be time-consuming
+and error-prone. With a header file, the related declarations appear
+in only one place. If they need to be changed, they can be changed in one
+place, and programs that include the header file will automatically use the
+new version when next recompiled. The header file eliminates the labor of
+finding and changing all the copies as well as the risk that a failure to
+find one copy will result in inconsistencies within a program.
+
+In C, the usual convention is to give header files names that end with `.h'.
+It is most portable to use only letters, digits, dashes, and underscores in
+header file names, and at most one dot.
+
+
+Here is a tutorial on CPP header files
+https://www.simplilearn.com/tutorials/cpp-tutorial/guide-to-understand-cpp-header-files#:~:text=DevelopmentExplore%20Program-,What%20Are%20C%2B%2B%20Header%20Files%3F,processed%20prior%20to%20the%20compilation.
+
+
 
 ## Other Notes
 - This repository is under constant development, documentation might not be up-to-date. Please contact Michael Wu <wuxiaohua1011@gmail.com> for any questions. 
+

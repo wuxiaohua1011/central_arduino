@@ -2,26 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include <pin.h>
+#include "pin.h"
+#include "utilities.h"
 
-bool isLimiterOn(int pin)
-{
-    if (digitalRead(pin) == HIGH)
-    {
-        // nothing is pressing against limiter
-        return false;
-    }
-    return true;
-}
 
-void updateLimiterStates(VehicleState *state)
-{
-    state->isSteeringLeftLimiterOn = isLimiterOn(STEERING_LEFT_LIMITER);
-    state->isSteeringRightLimiterOn = isLimiterOn(STEERING_RIGHT_LIMITER);
-}
+bool isLimiterOn(int pin);
 
-void setupSteeringLimiters()
-{
-    pinMode(STEERING_LEFT_LIMITER, INPUT_PULLUP);
-    pinMode(STEERING_RIGHT_LIMITER, INPUT_PULLUP);
-}
+void updateLimiterStates(VehicleState *state);
+
+void setupSteeringLimiters();

@@ -8,12 +8,10 @@
 #include <radiolink.h>
 #include <spark_max.h>
 #include <pwm_voltage_converter.h>
-#include <speed_estimation.h>
 #include <SerialCommunications.h>
 #include <steering_limiter.h>
 #include <brake.h>
 #include <angle_sensor.h>
-#include <controls.h>
 
 bool readInProgress = false;
 bool newDataFromPC = false;
