@@ -41,6 +41,9 @@ void setupModules()
 
   radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
   module_manager->setupModule(radio_link);
+
+  steering_limiter = new SteeringLimiter(STEERING_LEFT_LIMITER, STEERING_RIGHT_LIMITER);
+  module_manager->setupModule(steering_limiter);
 }
 
 void synchronizeModules()

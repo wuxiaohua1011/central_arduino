@@ -2,12 +2,23 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "pin.h"
 #include "models.h"
+#include "base_module.h"
+class SteeringLimiter : public BaseModule
+{
+public:
+    SteeringLimiter(uint32_t left_pin, uint32_t right_pin);
+    Status setup();
+    Status loop();
+    Status cleanup();
 
+    bool isLeftLimitorON();
+    bool isRightLimitorON();
 
-bool isLimiterOn(int pin);
+private:
+    bool isLimiterOn(uint32_t pin);
 
-void updateLimiterStates(VehicleState *state);
+    uint32_t left_limiter_pin;
+    uint32_t right_limiter_pin;
+};
 
-void setupSteeringLimiters();

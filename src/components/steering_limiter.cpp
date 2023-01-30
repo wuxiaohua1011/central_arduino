@@ -5,7 +5,34 @@
 #include <Arduino.h>
 #include "steering_limiter.h"
 
-bool isLimiterOn(int pin)
+SteeringLimiter::SteeringLimiter(uint32_t left_pin, uint32_t right_pin)
+{
+    this->left_limiter_pin = left_pin;
+    this->right_limiter_pin = right_pin;
+}
+
+Status 
+SteeringLimiter::setup()
+{
+    pinMode(this->left_limiter_pin, INPUT_PULLUP);
+    pinMode(this->right_limiter_pin, INPUT_PULLUP);
+    return Status::SUCCESS;
+}
+
+Status 
+SteeringLimiter::loop()
+{
+    return Status::SUCCESS;
+}
+
+Status 
+SteeringLimiter::cleanup()
+{
+    return Status::SUCCESS;
+}
+
+bool
+SteeringLimiter::isLimiterOn(uint32_t pin)
 {
     if (digitalRead(pin) == HIGH)
     {
@@ -14,15 +41,13 @@ bool isLimiterOn(int pin)
     }
     return true;
 }
-
-void updateLimiterStates(VehicleState *state)
+bool
+SteeringLimiter::isLeftLimitorON()
 {
-    state->isSteeringLeftLimiterOn = isLimiterOn(STEERING_LEFT_LIMITER);
-    state->isSteeringRightLimiterOn = isLimiterOn(STEERING_RIGHT_LIMITER);
+    return this->isLimiterOn(this->left_limiter_pin);
 }
 
-void setupSteeringLimiters()
+bool SteeringLimiter::isRightLimitorON()
 {
-    pinMode(STEERING_LEFT_LIMITER, INPUT_PULLUP);
-    pinMode(STEERING_RIGHT_LIMITER, INPUT_PULLUP);
+    return this->isLimiterOn(this->right_limiter_pin);
 }
