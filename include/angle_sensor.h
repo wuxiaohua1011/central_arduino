@@ -4,10 +4,6 @@
 
 #include "pin.h"
 #include "base_module.h"
-
-const float LEFT_ANGLE = -30.0; // Minimun distance for actuator
-const float RIGHT_ANGLE = 30.0; // Maximum safe distance that the actuator can move (inches)
-float measureAngle();
 class AngleSensor : public BaseModule
 {
     
