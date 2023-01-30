@@ -158,18 +158,19 @@ Actuation * RadioLinkModule::getRadioLinkActuation()
     act->throttle = this->pulseTimeToFloat(throttle_pulse_time);
     act->steering = this->pulseTimeToFloat(steering_pulse_time);
     act->brake = this->pulseTimeToFloat(brake_pulse_time);
+    act->reverse = false;
 
-    if (button_pulse_time >= 1800)
-    {
-        act->reverse = true;
-    } else {
-        act->reverse = false;
-    }
 
     return act;
 }
 
-float RadioLinkModule::pulseTimeToFloat(uint32_t pulse_time)
+bool RadioLinkModule::isAutoFromButton()
+{
+    return button_pulse_time >= 1600;
+}
+
+float
+RadioLinkModule::pulseTimeToFloat(uint32_t pulse_time)
 {
     float val = constrain(pulse_time, 1000, 2000);
     val = (val - 1000.0) / (2000.0 - 1000.0) * (1 - 0) + 0;

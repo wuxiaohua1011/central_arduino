@@ -23,6 +23,13 @@ public:
     Status loop();
     Status cleanup();
 
+    /**
+     * @brief  write to throttle
+     * @note
+     * @retval None
+     */
+    void writeToThrottle(float throttle);
+
 private:
     void actuateFromArduinoPWM(float throttle);
 
@@ -33,12 +40,6 @@ private:
      */
     void setupPwmVoltageConverter();
 
-    /**
-     * @brief  write to throttle
-     * @note
-     * @retval None
-     */
-    void writeToThrottle(float throttle);
 
     float arduinoToROARConvert(int pulse_time);
 

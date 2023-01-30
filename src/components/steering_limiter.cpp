@@ -42,12 +42,12 @@ SteeringLimiter::isLimiterOn(uint32_t pin)
     return true;
 }
 bool
-SteeringLimiter::isLeftLimitorON()
+SteeringLimiter::isLeftLimiterON()
 {
     return this->isLimiterOn(this->left_limiter_pin);
 }
 
-bool SteeringLimiter::isRightLimitorON()
+bool SteeringLimiter::isRightLimiterON()
 {
     return this->isLimiterOn(this->right_limiter_pin);
 }

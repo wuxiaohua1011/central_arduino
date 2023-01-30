@@ -12,6 +12,9 @@ public:
     Status loop();
     Status cleanup();
 
+    float getSteeringAngle();
+    float getAngularVelocity();
+
 private : 
     float currentAngle;
     int pin;

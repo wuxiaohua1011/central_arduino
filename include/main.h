@@ -13,6 +13,8 @@
 #include "spark_max.h"
 #include "SerialCommunications.h"
 
+VehicleState *vehicle_state;
+
 ModuleManager *module_manager;
 LEDModule *led_module;
 SteeringAngleSensor *steering_angle_sensor;
@@ -37,6 +39,13 @@ setup();
  */
 void loop();
 
+
 void setupModules();
 
 void synchronizeModules();
+
+void actuate();
+
+void p_auto_drive();
+
+void p_manual_drive();

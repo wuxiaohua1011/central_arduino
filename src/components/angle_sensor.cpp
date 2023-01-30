@@ -34,3 +34,12 @@ Status SteeringAngleSensor::cleanup()
 {
     return Status::SUCCESS;
 }
+
+float SteeringAngleSensor::getSteeringAngle()
+{
+    return this->currentAngle;
+}
+float SteeringAngleSensor::getAngularVelocity()
+{
+    return 0.0;
+}

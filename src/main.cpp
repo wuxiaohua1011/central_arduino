@@ -16,14 +16,39 @@
 void setup()
 {
   Serial.begin(115200);
+  vehicle_state = new VehicleState();
   setupModules();
-  
 }
 
 void loop()
 {
   synchronizeModules();
   module_manager->loop();
+
+  actuate();
+}
+
+void actuate()
+{
+  if (vehicle_state->is_auto)
+  {
+    p_auto_drive();
+  }
+  else
+  {
+    p_manual_drive();
+  }
+}
+void p_auto_drive()
+{
+  spark_max_module->writeToSteering(vehicle_state->auto_actuation->steering);
+  pwm_to_voltage_converter->writeToThrottle(vehicle_state->auto_actuation->throttle);
+}
+
+void p_manual_drive()
+{
+  spark_max_module->writeToSteering(vehicle_state->manual_actuation->steering);
+  pwm_to_voltage_converter->writeToThrottle(vehicle_state->manual_actuation->throttle);
 }
 
 void setupModules()
@@ -54,5 +79,13 @@ void setupModules()
 
 void synchronizeModules()
 {
+  // get data from angle sensor, steering limiter and update vehicle state
+  vehicle_state->angle = steering_angle_sensor->getSteeringAngle();
+  vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
+  vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();
 
+  // get data from radio link
+  vehicle_state->manual_actuation = radio_link->getRadioLinkActuation();
+  vehicle_state->is_auto = radio_link->isAutoFromButton();
+  vehicle_state->auto_actuation = serial_communicator->getAction();
 }

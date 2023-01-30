@@ -11,6 +11,7 @@ SerialCommunicator::SerialCommunicator()
 Status SerialCommunicator::setup()
 {
     this->latest_vehicle_state = new VehicleState();
+    this->actuation_received = new Actuation();
     return Status::SUCCESS;
 }
 Status SerialCommunicator::loop()
@@ -25,8 +26,8 @@ Status SerialCommunicator::cleanup()
 
 Actuation *SerialCommunicator::getAction()
 {
-    Actuation *act = new Actuation();
-    return act;
+    
+    return this->actuation_received;
 }
 void SerialCommunicator::setVehicleState(VehicleState *vehicle_state)
 {
@@ -38,11 +39,11 @@ void SerialCommunicator::writeStateToSerial(VehicleState *state,
                                             char end_marker)
 {
 
-    Serial.print(state->act->throttle);
+    Serial.print(state->current_actuation->throttle);
     Serial.print(",");
-    Serial.print(state->act->steering);
+    Serial.print(state->current_actuation->steering);
     Serial.print(",");
-    Serial.print(state->act->brake);
+    Serial.print(state->current_actuation->brake);
     Serial.print(",");
     Serial.print(state->is_auto);
     Serial.print(",");

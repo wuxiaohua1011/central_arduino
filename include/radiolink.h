@@ -20,6 +20,7 @@ public:
     Status cleanup();
 
     Actuation * getRadioLinkActuation();
+    bool isAutoFromButton();
 
 private:
     float pulseTimeToFloat(uint32_t pulse_time);

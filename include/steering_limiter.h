@@ -12,8 +12,8 @@ public:
     Status loop();
     Status cleanup();
 
-    bool isLeftLimitorON();
-    bool isRightLimitorON();
+    bool isLeftLimiterON();
+    bool isRightLimiterON();
 
 private:
     bool isLimiterOn(uint32_t pin);
