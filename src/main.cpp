@@ -28,7 +28,7 @@ void loop()
 
 void setupModules()
 {
-  module_manager = new ModuleManager(1);
+  module_manager = new ModuleManager();
   
   led_module = new LEDModule(LED_BUILTIN, 500);
   module_manager->setupModule(led_module);
