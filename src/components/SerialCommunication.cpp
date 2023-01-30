@@ -4,9 +4,38 @@
 #include <Arduino.h>
 #include "SerialCommunications.h"
 
-void writeStateToSerial(VehicleState *state, 
-                        char startMarker, 
-                        char endMarker)
+SerialCommunicator::SerialCommunicator()
+{
+    
+}
+Status SerialCommunicator::setup()
+{
+    this->latest_vehicle_state = new VehicleState();
+    return Status::SUCCESS;
+}
+Status SerialCommunicator::loop()
+{
+    this->processSerialCommunication(this->latest_vehicle_state);
+    return Status::SUCCESS;
+}
+Status SerialCommunicator::cleanup()
+{
+    return Status::SUCCESS;
+}
+
+Actuation *SerialCommunicator::getAction()
+{
+    Actuation *act = new Actuation();
+    return act;
+}
+void SerialCommunicator::setVehicleState(VehicleState *vehicle_state)
+{
+    this->latest_vehicle_state = vehicle_state;
+}
+
+void SerialCommunicator::writeStateToSerial(VehicleState *state,
+                                            char start_marker,
+                                            char end_marker)
 {
 
     Serial.print(state->act->throttle);
@@ -22,17 +51,17 @@ void writeStateToSerial(VehicleState *state,
     Serial.println();
 }
 
-Actuation *parseActionData(char *buf, 
-                            uint32_t len, 
-                            char startMarker, 
-                            char endMarker)
+Actuation *SerialCommunicator::parseActionData(char *buf,
+                                               uint32_t len,
+                                               char start_marker,
+                                               char end_marker)
 {
     char *token = strtok(buf, ",");
     Actuation *act = new Actuation();
     float curr_throttle_reading = 0.0;
     float curr_steering_read = 0.0;
     float curr_brake_read = 0.0;
-    if (token[0] == startMarker)
+    if (token[0] == start_marker)
     {
         token = strtok(NULL, ",");
         if (token != NULL)
@@ -62,29 +91,25 @@ Actuation *parseActionData(char *buf,
     }
     return act;
 }
-void parseSerialData(VehicleState *vehicleState, 
-                     char startMarker, 
-                     char endMarker, 
-                     uint32_t buf_len,
-                     bool should_overwrite_state)
+void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
+                                         char start_marker,
+                                         char end_marker,
+                                         uint32_t buf_len)
 {
     char buf[buf_len];
-    size_t num_read = Serial.readBytesUntil(endMarker, buf, buf_len);
+    size_t num_read = Serial.readBytesUntil(end_marker, buf, buf_len);
     if (num_read > 1)
     {
         if (buf[1] == 's')
         {
             // if <'s'>
-            writeStateToSerial(vehicleState, startMarker, endMarker);
+            writeStateToSerial(vehicle_state, start_marker, end_marker);
             return;
         }
         else if (buf[1] == 'a')
         {
-            Actuation *new_act = parseActionData(buf, buf_len, startMarker, endMarker);
-            if (should_overwrite_state)
-            {
-                vehicleState->target_actuation = new_act;
-            }
+            Actuation *new_act = parseActionData(buf, buf_len, start_marker, end_marker);
+            this->actuation_received = new_act;
             return;
         }
     }
@@ -92,14 +117,13 @@ void parseSerialData(VehicleState *vehicleState,
     return;
 }
 
-void processSerialCommunication(VehicleState *vehicleState, 
-                                bool should_overwrite_state)
+void SerialCommunicator::processSerialCommunication(VehicleState *vehicle_state)
 {
     if (Serial.available() > 0)
     {
         if (Serial.peek() == START_MARKER)
         {
-            parseSerialData(vehicleState, START_MARKER, END_MARKER, 20, should_overwrite_state);
+            parseSerialData(vehicle_state, START_MARKER, END_MARKER, 20);
         }
         else
         {

@@ -47,6 +47,9 @@ void setupModules()
 
   spark_max_module = new SparkMaxModule(STEERING_OUTPUT_PIN);
   module_manager->setupModule(spark_max_module);
+
+  serial_communicator = new SerialCommunicator();
+  module_manager->setupModule(serial_communicator);
 }
 
 void synchronizeModules()

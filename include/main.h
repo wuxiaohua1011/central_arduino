@@ -11,6 +11,7 @@
 #include "radiolink.h"
 #include "steering_limiter.h"
 #include "spark_max.h"
+#include "SerialCommunications.h"
 
 ModuleManager *module_manager;
 LEDModule *led_module;
@@ -19,6 +20,7 @@ PWMVoltageConverterModule *pwm_to_voltage_converter;
 RadioLinkModule *radio_link;
 SteeringLimiter *steering_limiter;
 SparkMaxModule *spark_max_module;
+SerialCommunicator *serial_communicator;
 
 /**
  * @brief  main setup function

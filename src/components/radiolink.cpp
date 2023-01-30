@@ -166,10 +166,10 @@ Actuation * RadioLinkModule::getRadioLinkActuation()
         act->reverse = false;
     }
 
-    return act ;
+    return act;
 }
 
-float RadioLinkModule::pulseTimeToFloat(uint32_t pulse_time);
+float RadioLinkModule::pulseTimeToFloat(uint32_t pulse_time)
 {
     float val = constrain(pulse_time, 1000, 2000);
     val = (val - 1000.0) / (2000.0 - 1000.0) * (1 - 0) + 0;
