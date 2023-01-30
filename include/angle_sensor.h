@@ -11,6 +11,15 @@
 
 #include "pin.h"
 #include "base_module.h"
+#include <CircularBuffer.h>
+
+const uint32_t STEERING_ANGLE_BUFFER_LEN = 5;
+
+struct SteeringReading
+{
+    float reading;
+    uint32_t timestamp;
+};
 
 class SteeringAngleSensor : public BaseModule
 {
@@ -79,6 +88,7 @@ private:
      */
     float currentAngle;
 
+    float currentAngularVelocity;
     /**
      * @brief Pin number for the sensor
      */
@@ -93,4 +103,17 @@ private:
      * @brief The right angle limit
      */
     const float RIGHT_ANGLE = 30.0;
+    /**
+     * @brief add new reading to the buffer
+    */
+    void addReading(float reading);
+
+    /**
+     * @brief calculates the angular velocity
+     * @note if there is < STEERING_ANGLE_BUFFER_LEN data in the buffer, this function will return 0
+     * 
+     */
+    float calcVelocity();
+    CircularBuffer<float, STEERING_ANGLE_BUFFER_LEN> reading_buffer;
+    CircularBuffer<uint32_t, STEERING_ANGLE_BUFFER_LEN> timestamp_buffer;
 };

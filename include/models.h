@@ -24,10 +24,10 @@ struct VehicleState
     Actuation *manual_actuation = new Actuation();
     Actuation *auto_actuation = new Actuation();
     Actuation *current_actuation = new Actuation();
-    float speed = -1.0;
     bool is_auto = false;
     bool is_left_limiter_ON = false;
     bool is_right_limiter_ON = false;
     float angle = 0.0;
+    float angular_velocity = 0.0;
 };
 #endif //_MODELS_h

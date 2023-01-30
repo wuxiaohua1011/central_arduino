@@ -48,7 +48,8 @@ void SerialCommunicator::writeStateToSerial(VehicleState *state,
     Serial.print(state->is_auto);
     Serial.print(",");
     Serial.print(state->angle);
-
+    Serial.print(",");
+    Serial.print(state->angular_velocity);
     Serial.println();
 }
 
