@@ -22,6 +22,7 @@ void setup()
 
 void loop()
 {
+  synchronizeModules();
   module_manager->loop();
 }
 
@@ -37,9 +38,12 @@ void setupModules()
 
   pwm_to_voltage_converter = new PWMVoltageConverterModule(THROTTLE_OUTPUT_PIN);
   module_manager->setupModule(pwm_to_voltage_converter);
+
+  radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
+  module_manager->setupModule(radio_link);
 }
 
-void updateModules()
+void synchronizeModules()
 {
-  
+
 }

@@ -3,20 +3,24 @@
 // license that can be found in the LICENSE file.
 
 #include <Arduino.h>
-#include <pin.h>
+#include "base_module.h"
+#include "models.h"
 
+class RadioLinkModule : public BaseModule
+{
+    static void calcThrottleSignal();
+    static void calcSteeringSignal();
+    static void calcBrakeSignal();
+    static void calcButtonSignal();
 
-extern volatile int throttle_pulse_time;
-extern volatile int steering_pulse_time;
-extern volatile int brake_pulse_time;
-extern volatile int button_pulse_time;
+public:
+    RadioLinkModule(uint32_t throttle_source_pin, uint32_t steering_source_pin, uint32_t brake_source_pin, uint32_t button_source_pin);
+    Status setup();
+    Status loop();
+    Status cleanup();
 
-void calcThrottleSignal();
+    Actuation * getRadioLinkActuation();
 
-void calcSteeringSignal();
-
-void calcBrakeSignal();
-
-void calcButtonSignal();
-
-void setupRadioLink();
+private:
+    float pulseTimeToFloat(uint32_t pulse_time);
+};
