@@ -4,6 +4,13 @@
 
 #ifndef _UTILITIES_h
 #define _UTILITIES_h
+
+/**
+In C++, the main difference between a struct and a class is the default access level. A struct is considered a public type, while a class is considered a private type. This means that by default, all members of a struct are public, while all members of a class are private.
+In addition to this, structs have no inheritance while a class has this feature.
+Another difference is that structs are typically used to represent a collection of data, while classes are used to represent objects with both data and behavior (methods).
+However, struct and class are very similar in C++, the only real difference is the default access level and some people use struct for POD (Plain Old Data) and class for object with behavior. You can use struct or class interchangeably in most cases.
+*/
 struct Actuation
 {
   float throttle = 0.0f;

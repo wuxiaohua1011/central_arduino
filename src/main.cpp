@@ -11,20 +11,43 @@
  *
  **/
 #include <main.h>
+#include <assert.h>
 
+BaseModule modules[num_modules];
 void setup()
 {
   Serial.begin(115200);
-  setupPwmVoltageConverter();
-  setupLED();
-  setupSparkMax();
-  setupRadioLink();
-  setupSteeringLimiters();
+  registerModule(AngleSensor(STEERING_ANGLE_SENSOR));
+
+  assert(num_modules <= sizeof(modules)); // this will check if number of modules matches the declared one
+
+  setupAllModules();
+
+
+  // setupPwmVoltageConverter();
+  // setupLED();
+  // setupSparkMax();
+  // setupRadioLink();
+  // setupSteeringLimiters();
   // setupBrake(); // this is a blocking call
+}
+
+bool registerModule(BaseModule module)
+{
+    if (sizeof(modules) == num_modules) 
+    {
+      return false;
+    }
+    modules[sizeof(modules)] = module;
+    return true;
 }
 
 void loop()
 {
+  loopAllModules();
+
+
+  
   // update state
   vehicleState->is_auto = determine_auto();
   vehicleState->angle = measureAngle();
@@ -43,6 +66,23 @@ void loop()
   // onManualDrive();
   applyVehicleSafetyPolicy(vehicleState);
   actuate(vehicleState->act);
+}
+
+void setupAllModules()
+{
+  for (BaseModule module : modules) {
+    Status status = module.setup();
+    assert(status == Status::SUCCESS);
+  }
+}
+
+void loopAllModules()
+{
+  for (BaseModule module : modules)
+  {
+    Status status = module.loop();
+    assert(status == Status::SUCCESS);
+  }
 }
 
 void onAutoDrive()

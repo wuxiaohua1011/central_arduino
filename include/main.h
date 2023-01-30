@@ -12,11 +12,12 @@
 #include <steering_limiter.h>
 #include <brake.h>
 #include <angle_sensor.h>
+#include <base_module.h>
 
-bool readInProgress = false;
-bool newDataFromPC = false;
-
+const uint32_t num_modules = 1;
 VehicleState *vehicleState = new VehicleState();
+
+
 /**
  * @brief  main setup function
  * @note
@@ -30,6 +31,15 @@ void setup();
  * @retval None
  */
 void loop();
+
+void setupAllModules();
+void loopAllModules();
+/**
+ * @brief   Add a Module
+ * @note The order of the registration determine the order that it is setup and loop
+ * @param module new module to add
+ */
+bool registerModule(BaseModule module);
 
 void actuate(Actuation *act);
 
