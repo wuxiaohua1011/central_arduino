@@ -7,10 +7,31 @@
 
 #include "pin.h"
 #include "pwm_voltage_converter.h"
-SAMDUE_PWM *PWM_Instance;
 
 
-void actuateFromArduinoPWM(float throttle)
+PWMVoltageConverterModule::PWMVoltageConverterModule(int pin)
+{
+    this->pin = pin;
+    this->throttle = 0.0;
+}
+Status PWMVoltageConverterModule::setup()
+{
+    PWM_Instance = new SAMDUE_PWM(this->pin, IDLE_FREQUENCY, 20.0f);
+    return Status::SUCCESS;
+}
+Status PWMVoltageConverterModule::loop()
+{
+    this->writeToThrottle(this->throttle);
+    return Status::SUCCESS;
+
+}
+Status PWMVoltageConverterModule::cleanup()
+{
+    this->writeToThrottle(0.0);
+    return Status::SUCCESS;
+}
+
+void PWMVoltageConverterModule::actuateFromArduinoPWM(float throttle)
 {
     throttle = constrain(throttle, 0, 1);
     float frequency = (throttle - 0) / (1 - 0) * (MAX_HZ - MIN_HZ) + MIN_HZ;
@@ -18,27 +39,17 @@ void actuateFromArduinoPWM(float throttle)
 }
 
 /**
- * @brief  setup PWM to voltage converter
- * @note
- * @retval None
- */
-void setupPwmVoltageConverter()
-{
-    // pinMode(THROTTLE_OUTPUT_PIN, OUTPUT);
-    PWM_Instance = new SAMDUE_PWM(THROTTLE_OUTPUT_PIN, IDLE_FREQUENCY, 20.0f);
-}
-
-/**
  * @brief  write to throttle
  * @note
  * @retval None
  */
-void writeToThrottle(float throttle)
+void PWMVoltageConverterModule::writeToThrottle(float throttle)
 {
     actuateFromArduinoPWM(throttle);
 }
 
-float arduinoToROARConvert(int pulse_time)
+float PWMVoltageConverterModule::arduinoToROARConvert(int pulse_time)
 {
     return (pulse_time - 1000.0) / (2000.0 - 1000) * (1 - -1) + -1;
 }
+

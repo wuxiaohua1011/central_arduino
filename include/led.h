@@ -3,10 +3,31 @@
 // license that can be found in the LICENSE file.
 
 #include <Arduino.h>
+#include "base_module.h"
+enum class LEDMode
+{
+    Blink,
+    ON,
+    OFF
+};
 
-extern bool led_builtin_was_on;
+class LEDModule : public BaseModule
+{
+public:
+    LEDModule(int pin, uint32_t blink_interval);
+    Status setup();
+    Status loop();
+    Status cleanup();
+    Status setMode(LEDMode desiredMode);
 
-void blink_builtin_led();
+private:
+    void blink();
+    void turnOn();
+    void turnOff();
+    bool led_builtin_was_on;
+    int pin;
+    uint32_t blink_interval;
+    uint32_t last_blink_time;
+    LEDMode mode;
 
-void setupLED();
-
+};

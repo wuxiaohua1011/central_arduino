@@ -3,6 +3,8 @@
 */
 #ifndef _BASE_MODULE_h
 #define _BASE_MODULE_h
+#include "models.h"
+
 /**
  * @brief Enumeration of possible statuses that the module can return
  * @note SUCCESS - The module has completed function
@@ -40,3 +42,5 @@ public:
     virtual Status cleanup();
 };
 #endif //_BASE_MODULE_h
+
+

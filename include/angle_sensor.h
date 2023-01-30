@@ -4,12 +4,10 @@
 
 #include "pin.h"
 #include "base_module.h"
-class AngleSensor : public BaseModule
+class SteeringAngleSensor : public BaseModule
 {
-    
-
 public:
-    AngleSensor(int pin);
+    SteeringAngleSensor(int pin);
     Status setup();
     Status loop();
     Status cleanup();

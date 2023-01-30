@@ -13,100 +13,33 @@
 #include <main.h>
 #include <assert.h>
 
-BaseModule modules[num_modules];
 void setup()
 {
   Serial.begin(115200);
-  registerModule(AngleSensor(STEERING_ANGLE_SENSOR));
-
-  assert(num_modules <= sizeof(modules)); // this will check if number of modules matches the declared one
-
-  setupAllModules();
-
-
-  // setupPwmVoltageConverter();
-  // setupLED();
-  // setupSparkMax();
-  // setupRadioLink();
-  // setupSteeringLimiters();
-  // setupBrake(); // this is a blocking call
-}
-
-bool registerModule(BaseModule module)
-{
-    if (sizeof(modules) == num_modules) 
-    {
-      return false;
-    }
-    modules[sizeof(modules)] = module;
-    return true;
+  setupModules();
+  
 }
 
 void loop()
 {
-  loopAllModules();
+  module_manager->loop();
+}
 
-
+void setupModules()
+{
+  module_manager = new ModuleManager(1);
   
-  // update state
-  vehicleState->is_auto = determine_auto();
-  vehicleState->angle = measureAngle();
-  updateLimiterStates(vehicleState);
+  led_module = new LEDModule(LED_BUILTIN, 500);
+  module_manager->setupModule(led_module);
 
-  // Serial.println(vehicleState->speed);
-  // actuation
-  // if (vehicleState->is_auto)
-  // {
-  // onAutoDrive();
-  // }
-  // else
-  // {
-  onManualDrive();
-  // }
-  // onManualDrive();
-  applyVehicleSafetyPolicy(vehicleState);
-  actuate(vehicleState->act);
+  steering_angle_sensor = new SteeringAngleSensor(STEERING_ANGLE_SENSOR);
+  module_manager->setupModule(steering_angle_sensor);
+
+  pwm_to_voltage_converter = new PWMVoltageConverterModule(THROTTLE_OUTPUT_PIN);
+  module_manager->setupModule(pwm_to_voltage_converter);
 }
 
-void setupAllModules()
+void updateModules()
 {
-  for (BaseModule module : modules) {
-    Status status = module.setup();
-    assert(status == Status::SUCCESS);
-  }
-}
-
-void loopAllModules()
-{
-  for (BaseModule module : modules)
-  {
-    Status status = module.loop();
-    assert(status == Status::SUCCESS);
-  }
-}
-
-void onAutoDrive()
-{
-  digitalWrite(LED_BUILTIN, HIGH);
-  // processSerialCommunication(vehicleState, true);
-  vehicleState->act->throttle = vehicleState->target_actuation->throttle;
-  vehicleState->act->steering = vehicleState->target_actuation->steering;
-}
-
-void onManualDrive()
-{
-
-  digitalWrite(LED_BUILTIN, LOW);
-  // if button is not pressed, serial input is ignored, use controller input
-  vehicleState->act->throttle = constrain(arduinoToROARConvert(throttle_pulse_time), 0, 1);
-  vehicleState->act->steering = arduinoToROARConvert(steering_pulse_time);
-  vehicleState->act->brake = arduinoToROARConvert(brake_pulse_time);
-  processSerialCommunication(vehicleState, false);
-}
-
-void actuate(Actuation *act)
-{
-  writeToSteering(act->steering);
-  // writeToBrake(act->brake);
-  writeToThrottle(act->throttle);
+  
 }

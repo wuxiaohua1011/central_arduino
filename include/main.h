@@ -3,27 +3,24 @@
 // license that can be found in the LICENSE file.
 
 #include <Arduino.h>
-#include <Servo.h>
-#include <led.h>
-#include <radiolink.h>
-#include <spark_max.h>
-#include <pwm_voltage_converter.h>
-#include <SerialCommunications.h>
-#include <steering_limiter.h>
-#include <brake.h>
-#include <angle_sensor.h>
-#include <base_module.h>
-
-const uint32_t num_modules = 1;
-VehicleState *vehicleState = new VehicleState();
+#include "pin.h"
+#include "module_manager.h"
+#include "led.h"
+#include "angle_sensor.h"
+#include "pwm_voltage_converter.h"
 
 
+ModuleManager *module_manager;
+LEDModule *led_module;
+SteeringAngleSensor *steering_angle_sensor;
+PWMVoltageConverterModule *pwm_to_voltage_converter;
 /**
  * @brief  main setup function
  * @note
  * @retval None
  */
-void setup();
+void
+setup();
 
 /**
  * @brief  main loop
@@ -32,59 +29,6 @@ void setup();
  */
 void loop();
 
-void setupAllModules();
-void loopAllModules();
-/**
- * @brief   Add a Module
- * @note The order of the registration determine the order that it is setup and loop
- * @param module new module to add
- */
-bool registerModule(BaseModule module);
+void setupModules();
 
-void actuate(Actuation *act);
-
-/**
- * @brief  wrapper function for a series of actions on manual mode
- * @note
- * @retval None
- */
-void onManualDrive();
-
-/**
- * @brief  wrapper function for a series of actions on auto mode
- * @note
- * @retval None
- */
-void onAutoDrive();
-
-bool determine_auto()
-{
-    if (button_pulse_time > 1600)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/**
- * @brief  Given a Vehicle State, limit its actuation by using limiter readings
- * @note this function is to be called BEFORE actuate
- * @retval None
- */
-void applyVehicleSafetyPolicy(VehicleState *state)
-{
-    if (state->isSteeringLeftLimiterOn)
-    {
-        // only allow steering to the right
-        state->act->steering = max(NEUTRAL_STEERING_PWM, state->act->steering);
-    }
-
-    if (state->isSteeringRightLimiterOn)
-    {
-        // only allow steering to the left
-        state->act->steering = min(NEUTRAL_STEERING_PWM, state->act->steering);
-    }
-}
+void updateModules();

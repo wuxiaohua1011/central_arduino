@@ -3,12 +3,12 @@
 #include "pin.h"
 #include "angle_sensor.h"
 
-AngleSensor::AngleSensor(int pin)
+SteeringAngleSensor::SteeringAngleSensor(int pin)
 {
     this->pin = pin;
 }
 
-Status AngleSensor::setup()
+Status SteeringAngleSensor::setup()
 {
     if (this->pin)
     {
@@ -17,7 +17,7 @@ Status AngleSensor::setup()
     return Status::FAILED;
 }
 
-Status AngleSensor::loop()
+Status SteeringAngleSensor::loop()
 {
     if (!this->pin)
     {
@@ -30,7 +30,7 @@ Status AngleSensor::loop()
     return Status::SUCCESS;
 }
 
-Status AngleSensor::cleanup()
+Status SteeringAngleSensor::cleanup()
 {
     return Status::SUCCESS;
 }
