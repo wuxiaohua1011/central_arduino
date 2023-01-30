@@ -11,13 +11,11 @@
 class ModuleManager
 {
 public:
-    ModuleManager(uint32_t num_modules);
+    ModuleManager();
     Status loop();
     Status setupModule(BaseModule *module);
 
 private:
-    uint32_t num_modules;
-    uint32_t modules_count = 0;
     std::vector<BaseModule *> modules;
 };
 #endif //_MODULE_MANAGER_H

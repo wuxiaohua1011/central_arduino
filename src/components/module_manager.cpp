@@ -1,9 +1,7 @@
 #include "module_manager.h"
 
-ModuleManager::ModuleManager(uint32_t num_modules)
+ModuleManager::ModuleManager()
 {
-    this->num_modules = num_modules;
-    this->modules_count = 0;
 }
 
 Status ModuleManager::loop()
@@ -16,13 +14,7 @@ Status ModuleManager::loop()
 
 Status ModuleManager::setupModule(BaseModule *module)
 {
-    if (this->modules_count >= this->num_modules)
-    {
-        return Status::FAILED;
-    }
     module->setup();
     modules.push_back(module);
-    this->modules_count ++;
-
     return Status::SUCCESS;
 }
