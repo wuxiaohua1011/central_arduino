@@ -39,13 +39,27 @@ setup();
  */
 void loop();
 
-
+/**
+ * @brief This function sets up all the modules in the system.
+ */
 void setupModules();
 
+/**
+ * @brief This function synchronizes the state of all modules in the system.
+ */
 void synchronizeModules();
 
+/**
+ * @brief This function actuates the modules in the system to control the vehicle.
+ */
 void actuate();
 
+/**
+ * @brief This function handles autonomous driving of the vehicle.
+ */
 void p_auto_drive();
 
+/**
+ * @brief This function handles manual driving of the vehicle.
+ */
 void p_manual_drive();
