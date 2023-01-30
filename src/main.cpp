@@ -44,6 +44,9 @@ void setupModules()
 
   steering_limiter = new SteeringLimiter(STEERING_LEFT_LIMITER, STEERING_RIGHT_LIMITER);
   module_manager->setupModule(steering_limiter);
+
+  spark_max_module = new SparkMaxModule(STEERING_OUTPUT_PIN);
+  module_manager->setupModule(spark_max_module);
 }
 
 void synchronizeModules()

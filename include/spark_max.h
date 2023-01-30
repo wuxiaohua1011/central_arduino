@@ -3,16 +3,26 @@
 // license that can be found in the LICENSE file.
 
 #include <Servo.h>
-#include <pin.h>
 #include <Arduino.h>
-const int NEUTRAL_STEERING_PWM = 1500;
+
+#include "base_module.h"
+class SparkMaxModule : public BaseModule
+{
 const int OUTPUT_STEERING_MAX = 2000;
 const int OUTPUT_STEERING_MIN = 1000;
 
-extern int output_steering_pwm;
+public:
+    SparkMaxModule(uint32_t pin);
+    Status setup();
+    Status loop();
+    Status cleanup();
+    void writeToSteering(float steering);
 
-void checkServoAttachments();
+private:
+    uint32_t pin;
+    void checkServoAttachments();
+    void setupSparkMax();
+    Servo servoSteering;
+};
 
-void writeToSteering(float steering);
 
-void setupSparkMax();

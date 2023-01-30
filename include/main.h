@@ -10,6 +10,7 @@
 #include "pwm_voltage_converter.h"
 #include "radiolink.h"
 #include "steering_limiter.h"
+#include "spark_max.h"
 
 ModuleManager *module_manager;
 LEDModule *led_module;
@@ -17,6 +18,7 @@ SteeringAngleSensor *steering_angle_sensor;
 PWMVoltageConverterModule *pwm_to_voltage_converter;
 RadioLinkModule *radio_link;
 SteeringLimiter *steering_limiter;
+SparkMaxModule *spark_max_module;
 
 /**
  * @brief  main setup function
