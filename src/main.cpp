@@ -22,33 +22,9 @@ void setup()
 
 void loop()
 {
-  synchronizeModules();
+  synchronizeModules(); 
   module_manager->loop();
-
-  actuate();
-}
-
-void actuate()
-{
-  if (vehicle_state->is_auto)
-  {
-    p_auto_drive();
-  }
-  else
-  {
-    p_manual_drive();
-  }
-}
-void p_auto_drive()
-{
-  spark_max_module->writeToSteering(vehicle_state->auto_actuation->steering);
-  pwm_to_voltage_converter->writeToThrottle(vehicle_state->auto_actuation->throttle);
-}
-
-void p_manual_drive()
-{
-  spark_max_module->writeToSteering(vehicle_state->manual_actuation->steering);
-  pwm_to_voltage_converter->writeToThrottle(vehicle_state->manual_actuation->throttle);
+  actuation_module->actuate(vehicle_state);
 }
 
 void setupModules()
@@ -75,6 +51,9 @@ void setupModules()
 
   serial_communicator = new SerialCommunicator();
   module_manager->setupModule(serial_communicator);
+
+  actuation_module = new ActuationModule(steering_limiter, pwm_to_voltage_converter, spark_max_module);
+  module_manager->setupModule(actuation_module);
 }
 
 void synchronizeModules()

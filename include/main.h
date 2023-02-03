@@ -12,6 +12,7 @@
 #include "steering_limiter.h"
 #include "spark_max.h"
 #include "SerialCommunications.h"
+#include "actuator.h"
 
 VehicleState *vehicle_state;
 
@@ -23,6 +24,7 @@ RadioLinkModule *radio_link;
 SteeringLimiter *steering_limiter;
 SparkMaxModule *spark_max_module;
 SerialCommunicator *serial_communicator;
+ActuationModule *actuation_module;
 
 /**
  * @brief  main setup function
@@ -45,21 +47,7 @@ void loop();
 void setupModules();
 
 /**
- * @brief This function synchronizes the state of all modules in the system.
+ * @brief This function synchronizes the state of all modules in the system. 
+ * @note this function should run BEFORE moduleManager.loop()
  */
 void synchronizeModules();
-
-/**
- * @brief This function actuates the modules in the system to control the vehicle.
- */
-void actuate();
-
-/**
- * @brief This function handles autonomous driving of the vehicle.
- */
-void p_auto_drive();
-
-/**
- * @brief This function handles manual driving of the vehicle.
- */
-void p_manual_drive();

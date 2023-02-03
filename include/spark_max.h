@@ -1,7 +1,8 @@
 // Copyright 2023 michael. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
+#ifndef _SPARK_MAX_MODULE_h
+#define _SPARK_MAX_MODULE_h
 #include <Servo.h>
 #include <Arduino.h>
 
@@ -25,4 +26,4 @@ private:
     Servo servoSteering;
 };
 
-
+#endif // _SPARK_MAX_MODULE_h

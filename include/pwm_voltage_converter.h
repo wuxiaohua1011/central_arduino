@@ -1,7 +1,8 @@
 // Copyright 2023 michael. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
+#ifndef _PWM_VOLTAGE_CONVERTER_MODULE_h
+#define _PWM_VOLTAGE_CONVERTER_MODULE_h
 #include <Arduino.h>
 #include <pin.h>
 #include <SAMDUE_PWM.h>
@@ -55,3 +56,4 @@ private:
 
     float throttle = 0.0;
 };
+#endif // _PWM_VOLTAGE_CONVERTER_MODULE_h
