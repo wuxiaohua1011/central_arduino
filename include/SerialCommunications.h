@@ -10,6 +10,7 @@ class SerialCommunicator : public BaseModule
 
 const char END_MARKER = '>';
 const char START_MARKER = '<';
+const byte numChars = 32;
 
 public:
     SerialCommunicator();
@@ -37,6 +38,10 @@ private:
 
     VehicleState * latest_vehicle_state;
     Actuation * actuation_received;
+
+    char receivedChars[32]; // make sure this is the same as numChars
+    boolean newData = false;
+
 
 };
 

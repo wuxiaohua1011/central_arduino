@@ -58,39 +58,25 @@ Actuation *SerialCommunicator::parseActionData(char *buf,
                                                char start_marker,
                                                char end_marker)
 {
-    char *token = strtok(buf, ",");
+    // buf = a,0.5,0.5,0.5
     Actuation *act = new Actuation();
-    float curr_throttle_reading = 0.0;
-    float curr_steering_read = 0.0;
-    float curr_brake_read = 0.0;
-    if (token[0] == start_marker)
-    {
-        token = strtok(NULL, ",");
-        if (token != NULL)
-        {
-            curr_throttle_reading = atof(token);
-            if (curr_throttle_reading <= 0 || 1 <= curr_throttle_reading)
-                return act;
-        }
-        token = strtok(NULL, ",");
-        if (token != NULL)
-        {
-            curr_steering_read = atof(token);
-            if (curr_steering_read <= -1 || 1 <= curr_steering_read)
-                return act;
-        }
-        token = strtok(NULL, ",");
-        if (token != NULL)
-        {
-            curr_brake_read = atof(token);
-            if (curr_brake_read <= -1 || 1 <= curr_brake_read)
-                return act;
-        }
-        act->throttle = curr_throttle_reading;
-        act->steering = curr_steering_read;
-        act->brake = curr_brake_read;
-        return act;
-    }
+
+    char * strtokIndx; // this is used by strtok() as an index
+    strtokIndx = strtok(buf,",");      // get the first part - the string
+
+
+    strtokIndx = strtok(NULL, ","); 
+    float curr_throttle_reading = atof(strtokIndx);   
+
+    strtokIndx = strtok(NULL, ","); 
+    float curr_steering_read = atof(strtokIndx);   
+
+    strtokIndx = strtok(NULL, ","); 
+    float curr_brake_read = atof(strtokIndx);     
+
+    act->throttle = curr_throttle_reading;
+    act->steering = curr_steering_read;
+    act->brake = curr_brake_read;
     return act;
 }
 void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
@@ -98,22 +84,15 @@ void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
                                          char end_marker,
                                          uint32_t buf_len)
 {
-    char buf[buf_len];
-    size_t num_read = Serial.readBytesUntil(end_marker, buf, buf_len);
-    if (num_read > 1)
+    if (receivedChars[0] == 's') {
+        writeStateToSerial(vehicle_state, start_marker, end_marker);
+        return;
+    } 
+    else if (receivedChars[0] == 'a')
     {
-        if (buf[1] == 's')
-        {
-            // if <'s'>
-            writeStateToSerial(vehicle_state, start_marker, end_marker);
-            return;
-        }
-        else if (buf[1] == 'a')
-        {
-            Actuation *new_act = parseActionData(buf, buf_len, start_marker, end_marker);
-            this->actuation_received = new_act;
-            return;
-        }
+        Actuation *new_act = parseActionData(receivedChars, this->numChars, start_marker, end_marker);
+        this->actuation_received = new_act;
+        return;
     }
 
     return;
@@ -121,19 +100,36 @@ void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
 
 void SerialCommunicator::processSerialCommunication(VehicleState *vehicle_state)
 {
-    if (Serial.available() > 0)
-    {
-        if (Serial.peek() == START_MARKER)
-        {
-            parseSerialData(vehicle_state, START_MARKER, END_MARKER, 20);
-        }
-        else
-        {
-            // byte misalignment, discard
-            while (Serial.available() && Serial.peek() != START_MARKER)
-            {
-                Serial.read();
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char rc;
+ 
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+
+        if (recvInProgress == true) {
+            if (rc != END_MARKER) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            }
+            else {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
             }
         }
+
+        else if (rc == START_MARKER) {
+            recvInProgress = true;
+        }
+    }
+
+    if (newData == true) {
+        this->parseSerialData(vehicle_state, START_MARKER, END_MARKER);
+        newData = false;
     }
 }
