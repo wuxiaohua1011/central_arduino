@@ -64,8 +64,21 @@ void synchronizeModules()
   vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
   vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();
 
-  // get data from radio link
-  vehicle_state->manual_actuation = radio_link->getRadioLinkActuation();
-  vehicle_state->is_auto = radio_link->isAutoFromButton();
-  vehicle_state->auto_actuation = serial_communicator->getAction();
+  
+  vehicle_state->is_auto = true; // radio_link->isAutoFromButton();
+
+  if (vehicle_state->is_auto == true)
+  {
+    // get data from serial 
+    vehicle_state->current_actuation->throttle = serial_communicator->getAction()->throttle;
+    vehicle_state->current_actuation->steering = serial_communicator->getAction()->steering;
+    vehicle_state->current_actuation->brake = serial_communicator->getAction()->brake;
+  } else 
+  {
+    // get data from radio link
+    vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
+    vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
+    vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
+  }
+  serial_communicator->setVehicleState(vehicle_state);
 }

@@ -25,7 +25,7 @@ private:
     void writeStateToSerial(VehicleState *state,
                             char start_marker,
                             char end_marker);
-    Actuation *parseActionData(char *buf,
+    void parseActionData(char *buf,
                                uint32_t len,
                                char start_marker,
                                char end_marker);

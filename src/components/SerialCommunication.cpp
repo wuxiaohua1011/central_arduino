@@ -26,7 +26,6 @@ Status SerialCommunicator::cleanup()
 
 Actuation *SerialCommunicator::getAction()
 {
-    
     return this->actuation_received;
 }
 void SerialCommunicator::setVehicleState(VehicleState *vehicle_state)
@@ -53,14 +52,12 @@ void SerialCommunicator::writeStateToSerial(VehicleState *state,
     Serial.println();
 }
 
-Actuation *SerialCommunicator::parseActionData(char *buf,
+void SerialCommunicator::parseActionData(char *buf,
                                                uint32_t len,
                                                char start_marker,
                                                char end_marker)
 {
     // buf = a,0.5,0.5,0.5
-    Actuation *act = new Actuation();
-
     char * strtokIndx; // this is used by strtok() as an index
     strtokIndx = strtok(buf,",");      // get the first part - the string
 
@@ -74,10 +71,9 @@ Actuation *SerialCommunicator::parseActionData(char *buf,
     strtokIndx = strtok(NULL, ","); 
     float curr_brake_read = atof(strtokIndx);     
 
-    act->throttle = curr_throttle_reading;
-    act->steering = curr_steering_read;
-    act->brake = curr_brake_read;
-    return act;
+    this->actuation_received->throttle = curr_throttle_reading;
+    this->actuation_received->steering = curr_steering_read;
+    this->actuation_received->brake = curr_brake_read;
 }
 void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
                                          char start_marker,
@@ -90,8 +86,7 @@ void SerialCommunicator::parseSerialData(VehicleState *vehicle_state,
     } 
     else if (receivedChars[0] == 'a')
     {
-        Actuation *new_act = parseActionData(receivedChars, this->numChars, start_marker, end_marker);
-        this->actuation_received = new_act;
+        parseActionData(receivedChars, this->numChars, start_marker, end_marker);
         return;
     }
 
