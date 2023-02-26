@@ -29,7 +29,7 @@ Actuation * ActuationModule::p_ensure_safety(Actuation *act)
     Actuation *output = new Actuation();
     output->brake = act->brake;
     output->reverse = act->reverse;
-    output->throttle = act->throttle;
+    output->throttle = MAX(0, act->throttle);
 
     if (this->steering_limiter->isLeftLimiterON())
     {
@@ -44,29 +44,15 @@ Actuation * ActuationModule::p_ensure_safety(Actuation *act)
     
     
 }
-void ActuationModule::p_manual_drive(VehicleState *vehicle_state)
+void ActuationModule::p_drive(VehicleState *vehicle_state)
 {
-    Actuation *act = this->p_ensure_safety(vehicle_state->manual_actuation);
-    spark_max_module->writeToSteering(act->steering);
-    pwm_to_voltage_converter->writeToThrottle(vehicle_state->manual_actuation->throttle);
-}
-
-void ActuationModule::p_auto_drive(VehicleState *vehicle_state)
-{
-    Actuation *act = this->p_ensure_safety(vehicle_state->auto_actuation);
+    Actuation *act = this->p_ensure_safety(vehicle_state->current_actuation);
     spark_max_module->writeToSteering(act->steering);
     pwm_to_voltage_converter->writeToThrottle(act->throttle);
 }
 
 void ActuationModule::actuate(VehicleState *vehicle_state)
 {
-    if (vehicle_state->is_auto)
-    {
-        p_auto_drive(vehicle_state);
-    }
-    else
-    {
-        p_manual_drive(vehicle_state);
-    }
+    p_drive(vehicle_state);
 }
 
