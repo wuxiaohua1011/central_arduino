@@ -37,18 +37,11 @@ void SerialCommunicator::writeStateToSerial(VehicleState *state,
                                             char start_marker,
                                             char end_marker)
 {
-
-    Serial.print(state->current_actuation->throttle);
-    Serial.print(",");
-    Serial.print(state->current_actuation->steering);
-    Serial.print(",");
-    Serial.print(state->current_actuation->brake);
-    Serial.print(",");
-    Serial.print(state->is_auto);
-    Serial.print(",");
-    Serial.print(state->angle);
-    Serial.print(",");
-    Serial.print(state->angular_velocity);
+    Serial.write((byte *)&state->is_auto, sizeof(state->is_auto));
+    Serial.write((byte *)&state->current_actuation->throttle, sizeof(state->current_actuation->throttle));
+    Serial.write((byte *)&state->current_actuation->steering, sizeof(state->current_actuation->steering));
+    Serial.write((byte *)&state->current_actuation->brake, sizeof(state->current_actuation->brake));
+    Serial.write((byte *)&state->angle, sizeof(state->angle));
     Serial.println();
 }
 

@@ -52,6 +52,12 @@ Status RadioLinkModule::setup()
 }
 Status RadioLinkModule::loop()
 {
+
+    // Serial.print(" throttle: ");
+    // Serial.print(throttle_pulse_time);
+    // Serial.print(" steering: ");
+    // Serial.print(steering_pulse_time);
+    // Serial.println();
     return Status::SUCCESS;
 }
 Status RadioLinkModule::cleanup()
@@ -61,6 +67,7 @@ Status RadioLinkModule::cleanup()
 
 void RadioLinkModule::calcThrottleSignal()
 {
+
     // record the interrupt time so that we can tell if the receiver has a signal from the transmitter
     throttle_last_interrupt_time = micros();
     // if the pin has gone HIGH, record the microseconds since the Arduino started up
@@ -84,6 +91,7 @@ void RadioLinkModule::calcThrottleSignal()
 
 void RadioLinkModule::calcSteeringSignal()
 {
+
     // record the interrupt time so that we can tell if the receiver has a signal from the transmitter
     steering_last_interrupt_time = micros();
     // if the pin has gone HIGH, record the microseconds since the Arduino started up
@@ -107,6 +115,7 @@ void RadioLinkModule::calcSteeringSignal()
 
 void RadioLinkModule::calcBrakeSignal()
 {
+
     // record the interrupt time so that we can tell if the receiver has a signal from the transmitter
     brake_last_interrupt_time = micros();
     // if the pin has gone HIGH, record the microseconds since the Arduino started up
@@ -153,11 +162,15 @@ void RadioLinkModule::calcButtonSignal()
 
 Actuation * RadioLinkModule::getRadioLinkActuation() 
 {
+    // THIS FUNCTION IS NO GOOD, will cause unknown freeze
+    
     Actuation * act = new Actuation();
 
+    noInterrupts();
     act->throttle = this->pulseTimeToFloat(throttle_pulse_time);
     act->steering = this->pulseTimeToFloat(steering_pulse_time);
     act->brake = this->pulseTimeToFloat(brake_pulse_time);
+    interrupts();
     act->reverse = false;
 
 
@@ -166,7 +179,7 @@ Actuation * RadioLinkModule::getRadioLinkActuation()
 
 bool RadioLinkModule::isAutoFromButton()
 {
-    return button_pulse_time >= 1600;
+    return steering_pulse_time >= 1600;
 }
 
 float

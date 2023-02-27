@@ -1,15 +1,3 @@
-// Copyright 2023 michael. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * By Michael Wu on July 9, 2022.
- * reference from https://www.camelsoftware.com/2015/12/25/reading-pwm-signals-from-an-rc-receiver-with-arduino/
- *
- * Please wire up your PWM Inputs on Digital Pins and revise the *_SOURCE fields to the corresponding pin numbers.
- * only arduino ble nano 33 and arduino due are tested
- *
- **/
 #include <main.h>
 #include <assert.h>
 
@@ -40,8 +28,8 @@ void setupModules()
   pwm_to_voltage_converter = new PWMVoltageConverterModule(THROTTLE_OUTPUT_PIN);
   module_manager->setupModule(pwm_to_voltage_converter);
 
-  radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
-  module_manager->setupModule(radio_link);
+  // radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
+  // module_manager->setupModule(radio_link);
 
   steering_limiter = new SteeringLimiter(STEERING_LEFT_LIMITER, STEERING_RIGHT_LIMITER);
   module_manager->setupModule(steering_limiter);
@@ -64,21 +52,19 @@ void synchronizeModules()
   vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
   vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();
 
-  
-  vehicle_state->is_auto = true; // radio_link->isAutoFromButton();
-
+  vehicle_state->is_auto = true; 
   if (vehicle_state->is_auto == true)
   {
     // get data from serial 
-    vehicle_state->current_actuation->throttle = serial_communicator->getAction()->throttle;
-    vehicle_state->current_actuation->steering = serial_communicator->getAction()->steering;
-    vehicle_state->current_actuation->brake = serial_communicator->getAction()->brake;
+    // vehicle_state->current_actuation->throttle = serial_communicator->getAction()->throttle;
+    // vehicle_state->current_actuation->steering = serial_communicator->getAction()->steering;
+    // vehicle_state->current_actuation->brake = serial_communicator->getAction()->brake;
   } else 
   {
     // get data from radio link
-    vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
-    vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
-    vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
+    // vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
+    // vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
+    // vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
   }
   serial_communicator->setVehicleState(vehicle_state);
 }
