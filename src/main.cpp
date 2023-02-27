@@ -28,8 +28,8 @@ void setupModules()
   pwm_to_voltage_converter = new PWMVoltageConverterModule(THROTTLE_OUTPUT_PIN);
   module_manager->setupModule(pwm_to_voltage_converter);
 
-  // radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
-  // module_manager->setupModule(radio_link);
+  radio_link = new RadioLinkModule(THROTTLE_SOURCE, STEERING_SOURCE, BRAKE_SOURCE, BUTTON_SOURCE);
+  module_manager->setupModule(radio_link);
 
   steering_limiter = new SteeringLimiter(STEERING_LEFT_LIMITER, STEERING_RIGHT_LIMITER);
   module_manager->setupModule(steering_limiter);
@@ -37,8 +37,8 @@ void setupModules()
   spark_max_module = new SparkMaxModule(STEERING_OUTPUT_PIN);
   module_manager->setupModule(spark_max_module);
 
-  serial_communicator = new SerialCommunicator();
-  module_manager->setupModule(serial_communicator);
+  // serial_communicator = new SerialCommunicator();
+  // module_manager->setupModule(serial_communicator);
 
   actuation_module = new ActuationModule(steering_limiter, pwm_to_voltage_converter, spark_max_module);
   module_manager->setupModule(actuation_module);
@@ -52,7 +52,7 @@ void synchronizeModules()
   vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
   vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();
 
-  vehicle_state->is_auto = true; 
+  vehicle_state->is_auto = false; 
   if (vehicle_state->is_auto == true)
   {
     // get data from serial 
@@ -62,9 +62,9 @@ void synchronizeModules()
   } else 
   {
     // get data from radio link
-    // vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
-    // vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
-    // vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
+    vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
+    vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
+    vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
   }
-  serial_communicator->setVehicleState(vehicle_state);
+  // serial_communicator->setVehicleState(vehicle_state);
 }
