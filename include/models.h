@@ -29,5 +29,7 @@ struct VehicleState
     bool is_right_limiter_ON = false;
     float angle = 0.0;
     float angular_velocity = 0.0;
+
+    float steering = 0.0;
 };
 #endif //_MODELS_h

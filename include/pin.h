@@ -7,8 +7,8 @@
 #define THROTTLE_SOURCE 23
 #define BRAKE_SOURCE 24
 #define BUTTON_SOURCE 25
-#define STEERING_LEFT_LIMITER 26
-#define STEERING_RIGHT_LIMITER 27
+#define STEERING_LEFT_LIMITER 27 // the limitor on the right side of the kart that detect oversteering to the left
+#define STEERING_RIGHT_LIMITER 26 // the limitor on the left side of the kart that detect oversteering to the right
 #define THROTTLE_OUTPUT_PIN 6 // hardware PWM pin
 #define STEERING_OUTPUT_PIN 7 
 

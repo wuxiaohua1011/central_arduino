@@ -21,7 +21,7 @@ public:
 
     Actuation * getRadioLinkActuation();
     bool isAutoFromButton();
-
+    float getSteering();
 private:
     float pulseTimeToFloat(uint32_t pulse_time);
 };

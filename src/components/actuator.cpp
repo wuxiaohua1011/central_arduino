@@ -31,24 +31,23 @@ Actuation * ActuationModule::p_ensure_safety(Actuation *act)
     output->reverse = act->reverse;
     output->throttle = MAX(0, act->throttle);
     output->steering = act->steering;
-    // if (this->steering_limiter->isLeftLimiterON())
-    // {
-    //     output->steering = MAX(0, act->steering);
-    // }
+    if (this->steering_limiter->isLeftLimiterON())
+    {
+        output->steering = MAX(0, act->steering);
+    }
 
-    // if (this->steering_limiter->isRightLimiterON())
-    // {
-    //     output->steering = MIN(0, act->steering);
-    // }
+    if (this->steering_limiter->isRightLimiterON())
+    {
+        output->steering = MIN(0, act->steering);
+    }
     return output;
-    
-    
 }
 void ActuationModule::p_drive(VehicleState *vehicle_state)
 {
     Actuation *act = this->p_ensure_safety(vehicle_state->current_actuation);
     spark_max_module->writeToSteering(act->steering);
     pwm_to_voltage_converter->writeToThrottle(act->throttle);
+    free(act); // MUST free allocated memory
 }
 
 void ActuationModule::actuate(VehicleState *vehicle_state)

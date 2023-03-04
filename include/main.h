@@ -11,7 +11,6 @@
 #include "radiolink.h"
 #include "steering_limiter.h"
 #include "spark_max.h"
-#include "SerialCommunications.h"
 #include "actuator.h"
 
 VehicleState *vehicle_state;
@@ -23,9 +22,9 @@ PWMVoltageConverterModule *pwm_to_voltage_converter;
 RadioLinkModule *radio_link;
 SteeringLimiter *steering_limiter;
 SparkMaxModule *spark_max_module;
-SerialCommunicator *serial_communicator;
 ActuationModule *actuation_module;
 
+float steering;
 /**
  * @brief  main setup function
  * @note

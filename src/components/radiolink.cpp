@@ -52,19 +52,18 @@ Status RadioLinkModule::setup()
 }
 Status RadioLinkModule::loop()
 {
-
-    // Serial.print(" throttle: ");
-    // Serial.print(throttle_pulse_time);
-    // Serial.print(" steering: ");
-    // Serial.print(steering_pulse_time);
-    // Serial.println();
     return Status::SUCCESS;
 }
 Status RadioLinkModule::cleanup()
 {
     return Status::SUCCESS;
 }
-
+float RadioLinkModule::getSteering()
+{
+    int flagValue = 0;
+    flagValue = steering_pulse_time;
+    return pulseTimeToFloat(flagValue);
+}
 void RadioLinkModule::calcThrottleSignal()
 {
 
@@ -161,19 +160,12 @@ void RadioLinkModule::calcButtonSignal()
 }
 
 Actuation * RadioLinkModule::getRadioLinkActuation() 
-{
-    // THIS FUNCTION IS NO GOOD, will cause unknown freeze
-    
+{    
     Actuation * act = new Actuation();
-
-    noInterrupts();
     act->throttle = this->pulseTimeToFloat(throttle_pulse_time);
     act->steering = this->pulseTimeToFloat(steering_pulse_time);
     act->brake = this->pulseTimeToFloat(brake_pulse_time);
-    interrupts();
     act->reverse = false;
-
-
     return act;
 }
 

@@ -3,7 +3,7 @@
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   vehicle_state = new VehicleState();
   setupModules();
 }
@@ -13,6 +13,7 @@ void loop()
   synchronizeModules(); 
   module_manager->loop();
   actuation_module->actuate(vehicle_state);
+  Serial.println();  
 }
 
 void setupModules()
@@ -37,9 +38,6 @@ void setupModules()
   spark_max_module = new SparkMaxModule(STEERING_OUTPUT_PIN);
   module_manager->setupModule(spark_max_module);
 
-  // serial_communicator = new SerialCommunicator();
-  // module_manager->setupModule(serial_communicator);
-
   actuation_module = new ActuationModule(steering_limiter, pwm_to_voltage_converter, spark_max_module);
   module_manager->setupModule(actuation_module);
 }
@@ -47,24 +45,15 @@ void setupModules()
 void synchronizeModules()
 {
   // get data from angle sensor, steering limiter and update vehicle state
-  vehicle_state->angle = steering_angle_sensor->getSteeringAngle();
-  vehicle_state->angular_velocity = steering_angle_sensor->getAngularVelocity();
+  // vehicle_state->angle = steering_angle_sensor->getSteeringAngle();
+  // vehicle_state->angular_velocity = steering_angle_sensor->getAngularVelocity();
   vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
   vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();
-
-  vehicle_state->is_auto = false; 
-  if (vehicle_state->is_auto == true)
-  {
-    // get data from serial 
-    // vehicle_state->current_actuation->throttle = serial_communicator->getAction()->throttle;
-    // vehicle_state->current_actuation->steering = serial_communicator->getAction()->steering;
-    // vehicle_state->current_actuation->brake = serial_communicator->getAction()->brake;
-  } else 
-  {
-    // get data from radio link
-    vehicle_state->current_actuation->throttle = radio_link->getRadioLinkActuation()->throttle;
-    vehicle_state->current_actuation->steering = radio_link->getRadioLinkActuation()->steering;
-    vehicle_state->current_actuation->brake = radio_link->getRadioLinkActuation()->brake;
-  }
-  // serial_communicator->setVehicleState(vehicle_state);
+  // Serial.print(" left_limiter: ");
+  // Serial.print(steering_limiter->isLeftLimiterON());
+  // get data from radio link
+  // vehicle_state->current_actuation->throttle = radio_link->current_actuation->throttle;
+  // vehicle_state->current_actuation->steering = radio_link->getSteering();
+  // vehicle_state->current_actuation->brake = radio_link->current_actuation->brake;
+  vehicle_state->current_actuation->steering = radio_link->getSteering();
 }
