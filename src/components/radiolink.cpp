@@ -64,6 +64,20 @@ float RadioLinkModule::getSteering()
     flagValue = steering_pulse_time;
     return pulseTimeToFloat(flagValue);
 }
+
+float RadioLinkModule::getThrottle()
+{
+    int flagValue = 0;
+    flagValue = throttle_pulse_time;
+    return pulseTimeToFloat(flagValue);
+}
+
+float RadioLinkModule::getBrake()
+{
+    int flagValue = 0;
+    flagValue = brake_pulse_time;
+    return pulseTimeToFloat(flagValue);
+}
 void RadioLinkModule::calcThrottleSignal()
 {
 

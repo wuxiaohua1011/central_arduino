@@ -12,6 +12,7 @@
 #include "steering_limiter.h"
 #include "spark_max.h"
 #include "actuator.h"
+#include "SerialCommunications.h"
 
 VehicleState *vehicle_state;
 
@@ -23,6 +24,7 @@ RadioLinkModule *radio_link;
 SteeringLimiter *steering_limiter;
 SparkMaxModule *spark_max_module;
 ActuationModule *actuation_module;
+SerialCommunicator *serial_communicator;
 
 float steering;
 /**
