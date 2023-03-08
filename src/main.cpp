@@ -47,7 +47,7 @@ void setupModules()
 void synchronizeModules()
 {
   // get data from angle sensor, steering limiter and update vehicle state
-  // vehicle_state->angle = steering_angle_sensor->getSteeringAngle();
+  vehicle_state->angle = steering_angle_sensor->getSteeringAngle();
   // vehicle_state->angular_velocity = steering_angle_sensor->getAngularVelocity();
   vehicle_state->is_left_limiter_ON = steering_limiter->isLeftLimiterON();
   vehicle_state->is_right_limiter_ON = steering_limiter->isRightLimiterON();

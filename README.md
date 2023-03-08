@@ -71,3 +71,10 @@ https://www.simplilearn.com/tutorials/cpp-tutorial/guide-to-understand-cpp-heade
 ## Other Notes
 - This repository is under constant development, documentation might not be up-to-date. Please contact Michael Wu <wuxiaohua1011@gmail.com> for any questions. 
 
+Arduino device at tty/ACM0 not found
+https://forum.arduino.cc/t/solved-uploads-fail-from-debian-to-due-no-device-found-on-ttyacm0/145106/13
+```
+stty -F /dev/ttyACM0 speed 1200 cs8 -cstopb -parenb  
+
+sudo chmod +rwx /dev/ttyACM0
+```
