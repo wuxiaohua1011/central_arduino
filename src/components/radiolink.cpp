@@ -185,7 +185,7 @@ Actuation * RadioLinkModule::getRadioLinkActuation()
 
 bool RadioLinkModule::isAutoFromButton()
 {
-    return steering_pulse_time >= 1600;
+    return button_pulse_time >= 1600;
 }
 
 float
